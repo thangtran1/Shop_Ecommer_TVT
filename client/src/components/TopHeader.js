@@ -1,19 +1,21 @@
 import React, { memo, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import path from "../ultils/path";
-import icons from "../ultils/icons";
+import path from "ultils/path";
+import icons from "ultils/icons";
 import { useSelector, useDispatch } from "react-redux";
-import { getCurrent } from "../store/user.js/asyncAction";
-import { logout } from "../store/user.js/userSlice";
+import { getCurrent } from "store/user.js/asyncAction";
+import { logout, clearMessage } from "store/user.js/userSlice";
+import Swal from "sweetalert2";
 const TopHeader = () => {
   const { LuLogOut } = icons;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(clearMessage());
     navigate(`/${path.LOGIN}`);
   };
-  const { isLoading, current } = useSelector((state) => state.user);
+  const { current, message } = useSelector((state) => state.user);
   useEffect(() => {
     let localStorageData = window.localStorage.getItem("persist:shop/users");
     if (localStorageData) {
@@ -25,6 +27,14 @@ const TopHeader = () => {
       }
     }
   }, [dispatch, current]);
+  useEffect(() => {
+    if (message) {
+      Swal.fire("Oops!", message, "error").then(() => {
+        dispatch(clearMessage());
+        navigate(`/${path.LOGIN}`);
+      });
+    }
+  }, [message]);
   return (
     <div className="h-[38px] w-full bg-main border flex items-center justify-center">
       <div className="w-main flex items-center justify-between text-xs text-white">

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import { apiGetProductDetail, apiGetProducts } from "../../apis/product";
+import { apiGetProductDetail, apiGetProducts } from "apis/product";
 import {
   Breadcrumb,
   SelectQuantity,
@@ -8,11 +8,11 @@ import {
   ProductItem,
   DetailInformation,
   CustomSlider,
-} from "../../components";
+} from "components";
 import Slider from "react-slick";
 import ReactImageMagnify from "react-image-magnify";
-import { formatPrice, renderStarFromNumber } from "../../ultils/helper";
-import { productItemPerPage } from "../../ultils/constants";
+import { formatPrice, renderStarFromNumber } from "ultils/helper";
+import { productItemPerPage } from "ultils/constants";
 const settings = {
   dots: false,
   infinite: false,
@@ -21,15 +21,20 @@ const settings = {
   slidesToScroll: 1,
 };
 const DetailProduct = () => {
-  const { pid, title, category } = useParams();
+  const { pid, title } = useParams();
+  const [currentImage, setCurrentImage] = useState(null);
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [update, setUpdate] = useState(false);
+
   console.log("product", product);
   const [relatedProducts, setRelatedProducts] = useState([]);
+
   const fetchProductDetail = useCallback(async () => {
     const response = await apiGetProductDetail(pid);
     if (response.success) {
       setProduct(response.productData);
+      setCurrentImage(response.productData?.thumb);
     }
   }, [pid]);
   const fetchRelatedProducts = useCallback(async () => {
@@ -64,9 +69,16 @@ const DetailProduct = () => {
     },
     [quantity, product?.quantity]
   );
+  useEffect(() => {
+    if (pid) fetchProductDetail();
+  }, [update]);
+
+  const reRender = useCallback(() => {
+    setUpdate(!update);
+  }, [update]);
   return (
     product && (
-      <div className="w-full">
+      <div className="w-full ">
         <div className="h-[81px] flex items-center justify-center bg-gray-100">
           <div className="w-main">
             <h3>{title}</h3>
@@ -75,16 +87,16 @@ const DetailProduct = () => {
         </div>
         <div className="w-main mx-auto mt-4 flex">
           <div className=" flex flex-col gap-4 w-2/5">
-            <div className="w-[458px] h-[458px] border">
+            <div className="w-[458px] h-[458px] border overflow-hidden ">
               <ReactImageMagnify
                 {...{
                   smallImage: {
                     alt: "Wristwatch by Ted Baker London",
                     isFluidWidth: true,
-                    src: product?.thumb,
+                    src: currentImage,
                   },
                   largeImage: {
-                    src: product?.thumb,
+                    src: currentImage,
                     width: 1800,
                     height: 1500,
                   },
@@ -101,7 +113,11 @@ const DetailProduct = () => {
                     <img
                       src={el}
                       alt="img-detail"
-                      className="h-[143px] w-full object-cover cursor-pointer hover:opacity-90 border-solid border border-gray-200"
+                      className="h-[143px]  w-[143px] object-cover cursor-pointer hover:opacity-90 border-solid border border-gray-200"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentImage(el);
+                      }}
                     />
                   </div>
                 ))}
@@ -150,15 +166,20 @@ const DetailProduct = () => {
           </div>
         </div>
         <div className="w-main mx-auto mt-8">
-          <DetailInformation />
+          <DetailInformation
+            totalRatings={product?.totalRatings}
+            nameProduct={product?.title}
+            pid={product?._id}
+            ratings={product?.ratings}
+            reRender={reRender}
+          />
         </div>
         <div className="w-main mx-auto mt-8">
           <h3 className="text-[20px] font-semibold py-[15px] border-b-2 border-main">
-            Other Customers also buy:
+            {`Other Customers also buy:`}
           </h3>
           <CustomSlider products={relatedProducts} normal={true} />
         </div>
-        <div className="h-[500px] w-full bg-gray-100"></div>
       </div>
     )
   );

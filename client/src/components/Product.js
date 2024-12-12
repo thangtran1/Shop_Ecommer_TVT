@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { formatMoney } from "../ultils/helper";
-import label from "../assets/label.webp";
+import { formatMoney } from "ultils/helper";
+import label from "assets/label.webp";
 // import label2 from "../assets/label2.png";
-import { renderStarFromNumber } from "../ultils/helper";
+import { renderStarFromNumber } from "ultils/helper";
 import { SelectOptions } from "./";
-import icons from "../ultils/icons";
+import icons from "ultils/icons";
 import { Link } from "react-router-dom";
-import path from "../ultils/path";
+
 const { FaEye, IoMdMenu, IoMdHeart } = icons;
 const Product = ({ productData, isNew, normal }) => {
   const [isShowOption, setIsShowOption] = useState(false);

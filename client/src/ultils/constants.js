@@ -160,13 +160,60 @@ export const tabs = [
       </div>
     </div>`,
   },
-  {
-    id: 5,
-    value: "CUSTOMER REVIEWS",
-    content: `<div class="space-y-4">
-      <h3 class="text-xl font-semibold">Customer Reviews</h3>
-      <p class="text-gray-600">Based on 3 reviews</p>
-      <button class="text-blue-600 hover:underline">Write a review</button>
-    </div>`,
-  },
+];
+export const colors = [
+  "red",
+  "blue",
+  "green",
+  "yellow",
+  "purple",
+  "pink",
+  "black",
+];
+export const sizes = ["S", "M", "L", "XL", "XXL"];
+export const brands = [
+  "Apple",
+  "Samsung",
+  "Sony",
+  "LG",
+  "Panasonic",
+  "Toshiba",
+  "Philips",
+];
+export const categories = [
+  "Electronics",
+  "Clothing",
+  "Home Decor",
+  "Sports",
+  "Toys",
+  "Books",
+  "Furniture",
+];
+export const price = [
+  "100",
+  "200",
+  "300",
+  "400",
+  "500",
+  "600",
+  "700",
+  "800",
+  "900",
+  "1000",
+];
+export const sortOptions = [
+  { id: 1, text: "Best Selling", value: "-sold" },
+  { id: 2, text: "Alphabetically, A-Z", value: "-title" },
+  { id: 3, text: "Alphabetically, Z-A", value: "title" },
+  { id: 4, text: "Price, height to low", value: "-price" },
+  { id: 5, text: "Price, low to height", value: "price" },
+  { id: 6, text: "Date, new to old", value: "-createdAt" },
+  { id: 7, text: "Date, old to new", value: "createdAt" },
+];
+export const voteOptions = [
+  { id: 1, text: "Bad", value: "bad" },
+  { id: 2, text: "Good", value: "good" },
+  { id: 3, text: "Very Good", value: "very good" },
+  { id: 4, text: "Excellent", value: "excellent" },
+  { id: 5, text: "Perfect", value: "perfect" },
 ];

@@ -1,6 +1,6 @@
 import React from "react";
 import Slider from "react-slick";
-import { Product } from "./";
+import { Product } from ".";
 
 const settings = {
   dots: false,

@@ -6,14 +6,13 @@ import {
   apiRegister,
   apiForgotPassword,
   apiFinalRegister,
-} from "../../apis/user";
+} from "apis/user";
 import Swal from "sweetalert2";
 import { useNavigate, Link } from "react-router-dom";
-import path from "../../ultils/path";
+import path from "ultils/path";
 import { useDispatch } from "react-redux";
-import { login } from "../../store/user.js/userSlice";
+import { login, logout } from "store/user.js/userSlice";
 import { toast } from "react-toastify";
-
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -81,6 +80,12 @@ const Login = () => {
     setToken("");
   };
 
+  const handleLogout = () => {
+    window.localStorage.removeItem("persist:shop/users");
+    dispatch(logout());
+    navigate(`/${path.HOME}`);
+    window.location.reload();
+  };
   return (
     <div className="w-full h-screen relative">
       {isVerifyEmail && (
@@ -290,6 +295,7 @@ const Login = () => {
             </div>
             <Link
               to={`/${path.HOME}`}
+              onClick={handleLogout}
               className=" text-sm  text-blue-500 hover:underline cursor-pointer"
             >
               Go Home

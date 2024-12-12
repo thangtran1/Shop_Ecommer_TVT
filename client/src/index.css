@@ -72,3 +72,34 @@ input {
   -moz-appearance: none;
   appearance: none;
 }
+/* Phan san pham */
+
+.my-masonry-grid {
+  display: flex;
+  width: 100%;
+  margin: 0 auto;
+  gap: 20px;
+}
+
+.my-masonry-grid_column {
+  padding: 0;
+  background-clip: padding-box;
+}
+
+.my-masonry-grid_column > div {
+  margin-bottom: 20px;
+  width: 100%;
+  padding: 0 !important;
+}
+
+@media (max-width: 800px) {
+  .my-masonry-grid {
+    margin-left: -15px; /* gutter size offset */
+  }
+  .my-masonry-grid_column {
+    padding-left: 15px; /* gutter size offset */
+  }
+  .my-masonry-grid_column > div {
+    margin-bottom: 15px; /* space between items */
+  }
+}

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 // import { ProductCard } from "./";
-import section1 from "../assets/section1.png";
-import section2 from "../assets/section2.png";
-import section3 from "../assets/section3.png";
-import section4 from "../assets/section4.png";
-import { apiGetProducts } from "../apis";
+import section1 from "assets/section1.png";
+import section2 from "assets/section2.png";
+import section3 from "assets/section3.png";
+import section4 from "assets/section4.png";
+import { apiGetProducts } from "apis";
 import ProductCard from "./ProductCard";
 const FearturedProduct = () => {
   const [products, setProducts] = useState(null);

@@ -1,8 +1,8 @@
 import React from "react";
-import logo from "../assets/logo_digital.png";
-import icons from "../ultils/icons";
+import logo from "assets/logo_digital.png";
+import icons from "ultils/icons";
 import { Link } from "react-router-dom";
-import path from "../ultils/path";
+import path from "ultils/path";
 const Header = () => {
   const { MdLocalPhone, MdOutlineMail, IoBagHandleOutline, FaUser } = icons;
   return (

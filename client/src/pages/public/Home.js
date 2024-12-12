@@ -5,10 +5,10 @@ import {
   BestSeller,
   DealDaily,
   FearturedProduct,
-} from "../../components";
+  CustomSlider,
+} from "components";
 import { useSelector } from "react-redux";
-import { CustomSlider } from "../../components";
-import icons from "../../ultils/icons";
+import icons from "ultils/icons";
 
 const { IoIosArrowForward } = icons;
 const Home = () => {

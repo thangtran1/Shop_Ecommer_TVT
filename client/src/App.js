@@ -6,7 +6,7 @@ import {
   Public,
   Service,
   FAQ,
-  Product,
+  Products,
   DetailProduct,
   Blogs,
   FinalRegister,
@@ -14,20 +14,22 @@ import {
 } from "./pages/public";
 import path from "./ultils/path";
 import { apiGetCategories } from "./store/app/asyncActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Modal } from "./components";
 function App() {
   const dispatch = useDispatch();
+  const { isShowModal, modalChildren } = useSelector((state) => state.app);
   useEffect(() => {
     dispatch(apiGetCategories());
   }, [dispatch]);
   return (
-    <div className="min-h-screen font-main">
+    <div className="font-main relative">
+      {isShowModal && <Modal>{modalChildren}</Modal>}
       <Routes>
         <Route path={path.PUBLIC} element={<Public />}>
           <Route path={path.HOME} element={<Home />}></Route>
-          <Route path={path.PRODUCTS} element={<Product />}></Route>
           <Route
             path={path.DETAIL_PRODUCT_CATEGORY_PID_TITLE}
             element={<DetailProduct />}
@@ -35,6 +37,7 @@ function App() {
           <Route path={path.BLOGS} element={<Blogs />}></Route>
           <Route path={path.OUR_SERVICES} element={<Service />}></Route>
           <Route path={path.FAQ} element={<FAQ />}></Route>
+          <Route path={path.PRODUCTS} element={<Products />}></Route>
           <Route path={path.RESET_PASSWORD} element={<ResetPassword />}></Route>
         </Route>
         <Route path={path.LOGIN} element={<Login />}></Route>

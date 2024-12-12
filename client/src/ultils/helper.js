@@ -9,8 +9,10 @@ export const createSlug = (string) =>
     .split(" ")
     .join("-");
 
-export const formatMoney = (number) =>
-  Number(number.toFixed(1)).toLocaleString();
+export const formatMoney = (number) => {
+  if (number === undefined || number === null) return "0";
+  return Number(number.toFixed(1)).toLocaleString();
+};
 
 export const renderStarFromNumber = (number) => {
   if (!Number(number)) return;
@@ -39,4 +41,9 @@ export const validate = (payload, setInValidFields) => {
 
 export const formatPrice = (price) => {
   return price.toLocaleString("vi-VN", { currency: "VND" });
+};
+
+export const generateRange = (start, end) => {
+  const length = end + 1 - start;
+  return Array.from({ length }, (_, index) => start + index);
 };

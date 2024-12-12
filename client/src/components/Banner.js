@@ -1,5 +1,5 @@
 import React from "react";
-import banner from "../assets/banner3.png";
+import banner from "assets/banner3.png";
 const Banner = () => {
   return (
     <div className="w-full ">
