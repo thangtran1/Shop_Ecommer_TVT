@@ -5,6 +5,10 @@ module.exports = {
     fontFamily: {
       main: ["Poppins", "sans-serif"],
     },
+    listStyleType: {
+      square: "square",
+      roman: "upper-roman",
+    },
     extend: {
       width: {
         main: "1220px",
@@ -56,6 +60,10 @@ module.exports = {
             transform: "translateX(0%)",
           },
         },
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
       },
 
       animation: {
@@ -64,6 +72,7 @@ module.exports = {
         "slide-top-sm": "slide-top-login 0.2s linear both", // removed semicolon
         "slider-right":
           "slider-right 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both",
+        fadeIn: "fadeIn 0.3s ease-in-out forwards",
       },
     },
   },

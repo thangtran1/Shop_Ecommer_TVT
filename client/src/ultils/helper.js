@@ -36,3 +36,7 @@ export const validate = (payload, setInValidFields) => {
   setInValidFields(invalidCount);
   return invalidCount;
 };
+
+export const formatPrice = (price) => {
+  return price.toLocaleString("vi-VN", { currency: "VND" });
+};

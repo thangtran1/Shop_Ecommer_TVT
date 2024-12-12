@@ -15,7 +15,10 @@ const createProduct = asyncHandler(async (req, res) => {
 
 const getProduct = asyncHandler(async (req, res) => {
   const { pid } = req.params;
-  const product = await Product.findById(pid);
+  const product = await Product.findById(pid).populate({
+    path: "ratings.postedBy",
+    select: "firstname lastname avatar",
+  });
 
   return res.status(200).json({
     success: product ? true : false,
@@ -43,11 +46,24 @@ const getProducts = asyncHandler(async (req, res) => {
     (matchedEl) => `$${matchedEl}`
   );
   const formatedQuries = JSON.parse(queryString);
+  let colorQueryObject = {};
 
   // Filtering theo title
   if (queries?.title)
     formatedQuries.title = { $regex: queries.title, $options: "i" };
-  let queryCommand = Product.find(formatedQuries);
+  if (queries?.category)
+    formatedQuries.category = { $regex: queries.category, $options: "i" };
+
+  if (queries?.color) {
+    delete formatedQuries.color;
+    const colorArr = queries?.color?.split(",");
+    const colorQuery = colorArr.map((el) => ({
+      color: { $regex: el, $options: "i" },
+    }));
+    colorQueryObject = { $or: colorQuery };
+  }
+  let q = { ...formatedQuries, ...colorQueryObject };
+  let queryCommand = Product.find(q);
 
   // Sorting theo gia
   if (req.query.sort) {
@@ -71,29 +87,16 @@ const getProducts = asyncHandler(async (req, res) => {
   // Execute query
   // so luong sp thoa man dieu kien !== so luong sp trar ve 1 lan goi api
 
-  //   queryCommand.exec(async (err, response) => {
-  //     if (err) throw new Error(err.message);
-  //     const counts = await Product.find(formatedQuries).countDocuments();
-  //     return res.status(200).json({
-  //       success: response ? true : false,
-  //       products: response ? response : "Cannot get products",
-  //       counts,
-  //     });
-  //   });
   try {
     const response = await queryCommand.exec();
-    const counts = await Product.find(formatedQuries).countDocuments();
-
+    const counts = await Product.find(q).countDocuments();
     return res.status(200).json({
-      success: !!response,
+      success: response ? true : false,
       counts,
-      products: response || "Cannot get products",
+      products: response ? response : "Cannot get products",
     });
   } catch (err) {
-    return res.status(500).json({
-      success: false,
-      message: err.message,
-    });
+    throw new Error(err.message);
   }
 });
 
@@ -122,35 +125,60 @@ const ratings = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   const { star, comment, pid } = req.body;
   if (!star || !pid) throw new Error("Missing inputs");
+
+  const imageUrls = req.files?.map((file) => file.path) || [];
+  console.log("Uploaded images:", imageUrls);
+
   const ratingProduct = await Product.findById(pid);
   const alreadyRating = ratingProduct?.ratings?.find(
     (el) => el.postedBy.toString() === _id
   );
 
+  let updatedProduct;
+
   if (alreadyRating) {
-    // update star & comment
-    await Product.updateOne(
+    // Update existing rating
+    updatedProduct = await Product.findOneAndUpdate(
       {
-        ratings: { $elemMatch: alreadyRating },
+        _id: pid,
+        "ratings._id": alreadyRating._id,
       },
       {
-        $set: { "ratings.$.star": star, "ratings.$.comment": comment },
+        $set: {
+          "ratings.$.star": star,
+          "ratings.$.comment": comment,
+          "ratings.$.createdAt": new Date(),
+          "ratings.$.images": imageUrls, // Đảm bảo images được set đúng
+        },
       },
-      { new: true }
-    );
+      {
+        new: true,
+        runValidators: true,
+      }
+    ).populate({
+      path: "ratings.postedBy",
+      select: "firstname lastname avatar",
+    });
   } else {
-    // add star & comment
-    const response = await Product.findByIdAndUpdate(
+    // Add new rating
+    updatedProduct = await Product.findByIdAndUpdate(
       pid,
       {
-        $push: { ratings: { star, comment, postedBy: _id } },
+        $push: {
+          ratings: {
+            star,
+            comment,
+            postedBy: _id,
+            createdAt: new Date(),
+            images: imageUrls, // Đảm bảo images được set đúng
+          },
+        },
       },
-      { new: true }
+      { new: true, runValidators: true }
     );
   }
 
   // sum ratings tong ratings / nguoi danh gia = sum ratings
-  const updatedProduct = await Product.findById(pid);
   const ratingCount = updatedProduct.ratings.length;
   const sumRatings = updatedProduct.ratings.reduce(
     (sum, el) => sum + +el.star,
@@ -158,12 +186,11 @@ const ratings = asyncHandler(async (req, res) => {
   );
   updatedProduct.totalRatings =
     Math.round((sumRatings * 10) / ratingCount) / 10;
-
   await updatedProduct.save();
 
   return res.status(200).json({
-    status: true,
-    updateProduct,
+    success: true,
+    product: updatedProduct,
   });
 });
 

@@ -1,20 +1,29 @@
 const router = require("express").Router();
 const ctrl = require("../controllers/product");
-const uploader = require("../config/cloundinary.config");
+const uploadCloud = require("../config/cloundinary.config");
 const { verifyAccessToken, isAdmin } = require("../middlewares/verifyToken");
 
+// Routes
 router.post("/", [verifyAccessToken, isAdmin], ctrl.createProduct);
 router.get("/", ctrl.getProducts);
-router.put("/ratings", verifyAccessToken, ctrl.ratings);
+
+// Route ratings với middleware xử lý upload 3 ảnh
+router.put(
+  "/ratings",
+  verifyAccessToken,
+  uploadCloud.array("images", 3),
+  ctrl.ratings
+);
 
 router.delete("/:pid", [verifyAccessToken, isAdmin], ctrl.deleteProduct);
 router.get("/:pid", ctrl.getProduct);
 router.put("/:pid", [verifyAccessToken, isAdmin], ctrl.updateProduct);
 
+// Route upload ảnh sản phẩm với middleware xử lý upload 10 ảnh
 router.put(
   "/uploadimage/:pid",
   [verifyAccessToken, isAdmin],
-  uploader.array("images", 10), // Cho phép upload tối đa 10 ảnh
+  uploadCloud.array("images", 10),
   ctrl.uploadImagesProduct
 );
 

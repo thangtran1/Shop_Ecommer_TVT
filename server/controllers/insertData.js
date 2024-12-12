@@ -22,7 +22,7 @@ const fn = async (product) => {
     color:
       product?.variants?.find((el) => el.label === "Color")?.variants[0] ||
       "Black",
-    totalRatings: Math.round(Math.random() * 5),
+    totalRatings: 0,
   });
 };
 

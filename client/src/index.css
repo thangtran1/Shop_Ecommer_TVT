@@ -66,3 +66,9 @@
   justify-content: center;
   align-items: center;
 }
+
+input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}

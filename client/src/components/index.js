@@ -15,3 +15,6 @@ export { default as Footer } from "./Footer";
 export { default as InputField } from "./InputField";
 export { default as Buttons } from "./Buttons";
 export { default as Breadcrumb } from "./Breadcrumb";
+export { default as SelectQuantity } from "./SelectQuantity";
+export { default as ProductItem } from "./ProductItem";
+export { default as DetailInformation } from "./DetailInformation";

@@ -10,12 +10,20 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
   cloudinary,
-  allowedFormats: ["jpg", "png"],
+  allowedFormats: ["jpg", "png", "gif"],
   params: {
     folder: "Ecommer_TVT",
+    resource_type: "auto",
+    timestamp: () => Math.round(new Date().getTime() / 1000),
+    transformation: [{ width: 1000, height: 1000, crop: "limit" }],
   },
 });
 
-const uploadCloud = multer({ storage });
+const uploadCloud = multer({
+  storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB
+  },
+});
 
 module.exports = uploadCloud;

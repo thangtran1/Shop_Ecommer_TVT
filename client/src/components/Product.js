@@ -8,7 +8,7 @@ import icons from "../ultils/icons";
 import { Link } from "react-router-dom";
 import path from "../ultils/path";
 const { FaEye, IoMdMenu, IoMdHeart } = icons;
-const Product = ({ productData, isNew }) => {
+const Product = ({ productData, isNew, normal }) => {
   const [isShowOption, setIsShowOption] = useState(false);
   return (
     <div className="w-full text-base  px-[10px]">
@@ -42,11 +42,13 @@ const Product = ({ productData, isNew }) => {
             alt="Img Best Seller"
             className="w-[274px] h-[274px] object-cover"
           />
-          <img
-            src={isNew ? label : label}
-            alt="label"
-            className={`w-[120px] top-[-32px] left-[-42px]  object-contain absolute`}
-          />
+          {!normal && (
+            <img
+              src={isNew ? label : label}
+              alt="label"
+              className={`w-[120px] top-[-32px] left-[-42px]  object-contain absolute`}
+            />
+          )}
           <span
             className={`font-bold absolute  top-[-10px] left-[-12px] text-white ${
               isNew ? "" : "text-sm"

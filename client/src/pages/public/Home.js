@@ -27,10 +27,10 @@ const Home = () => {
           <BestSeller />
         </div>
       </div>
-      <div className="my-8">
+      <div className="my-8 w-main">
         <FearturedProduct />
       </div>
-      <div className="my-8">
+      <div className="my-8 w-main">
         <h3 className="text-[20px] font-semibold py-[15px] border-b-2 border-main">
           NEW ARRIVALS
         </h3>
@@ -39,7 +39,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="my-8">
+      <div className="my-8 w-main">
         <h3 className="text-[20px] font-semibold py-[15px] border-b-2 border-main">
           HOT COLLECTION
         </h3>

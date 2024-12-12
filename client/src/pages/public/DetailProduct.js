@@ -1,9 +1,18 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import { apiGetProductDetail } from "../../apis/product";
-import { Breadcrumb } from "../../components";
+import { apiGetProductDetail, apiGetProducts } from "../../apis/product";
+import {
+  Breadcrumb,
+  SelectQuantity,
+  Buttons,
+  ProductItem,
+  DetailInformation,
+  CustomSlider,
+} from "../../components";
 import Slider from "react-slick";
 import ReactImageMagnify from "react-image-magnify";
+import { formatPrice, renderStarFromNumber } from "../../ultils/helper";
+import { productItemPerPage } from "../../ultils/constants";
 const settings = {
   dots: false,
   infinite: false,
@@ -14,64 +23,144 @@ const settings = {
 const DetailProduct = () => {
   const { pid, title, category } = useParams();
   const [product, setProduct] = useState(null);
+  const [quantity, setQuantity] = useState(1);
   console.log("product", product);
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const fetchProductDetail = useCallback(async () => {
     const response = await apiGetProductDetail(pid);
     if (response.success) {
       setProduct(response.productData);
     }
   }, [pid]);
+  const fetchRelatedProducts = useCallback(async () => {
+    const response = await apiGetProducts({
+      category: product?.category,
+      // limit: 4,
+    });
+    if (response.success) {
+      setRelatedProducts(response.products);
+    }
+  }, [product?.category]);
   useEffect(() => {
     if (pid) fetchProductDetail();
-  }, [pid, fetchProductDetail]);
+    if (product?.category) fetchRelatedProducts();
+  }, [pid, fetchProductDetail, product?.category, fetchRelatedProducts]);
+
+  const handleQuantity = useCallback((number) => {
+    if (!Number(number) || Number(number) < 1) {
+      return setQuantity(1);
+    } else {
+      setQuantity(Number(number));
+    }
+  }, []);
+
+  const handleChangeQuantity = useCallback(
+    (flag) => {
+      if (flag === "increase" && quantity < product?.quantity) {
+        setQuantity(quantity + 1);
+      } else if (flag === "decrease" && quantity > 1) {
+        setQuantity(quantity - 1);
+      }
+    },
+    [quantity, product?.quantity]
+  );
   return (
-    <div className="w-full">
-      <div className="h-[81px] flex items-center justify-center bg-gray-100">
-        <div className="w-main">
-          <h3>{title}</h3>
-          <Breadcrumb title={title} category={product?.category} />
-        </div>
-      </div>
-      <div className="w-main mx-auto mt-4 flex">
-        <div className=" flex flex-col gap-4 w-2/5">
-          <div className="w-[458px] h-[458px] border">
-            <ReactImageMagnify
-              {...{
-                smallImage: {
-                  alt: "Wristwatch by Ted Baker London",
-                  isFluidWidth: true,
-                  src: product?.images[0],
-                },
-                largeImage: {
-                  src: product?.images[0],
-                  width: 1800,
-                  height: 1500,
-                },
-              }}
-            />
+    product && (
+      <div className="w-full">
+        <div className="h-[81px] flex items-center justify-center bg-gray-100">
+          <div className="w-main">
+            <h3>{title}</h3>
+            <Breadcrumb title={title} category={product?.category} />
           </div>
-          <div className="w-[458px]">
-            <Slider
-              className="image flex flex-2 justify-between -mx-2"
-              {...settings}
-            >
-              {product?.images.map((el) => (
-                <div className="flex-1 p-1 " key={el}>
-                  <img
-                    src={el}
-                    alt="img-detail"
-                    className="h-[143px] w-full object-cover cursor-pointer hover:opacity-90 border-solid border border-gray-200"
-                  />
-                </div>
+        </div>
+        <div className="w-main mx-auto mt-4 flex">
+          <div className=" flex flex-col gap-4 w-2/5">
+            <div className="w-[458px] h-[458px] border">
+              <ReactImageMagnify
+                {...{
+                  smallImage: {
+                    alt: "Wristwatch by Ted Baker London",
+                    isFluidWidth: true,
+                    src: product?.thumb,
+                  },
+                  largeImage: {
+                    src: product?.thumb,
+                    width: 1800,
+                    height: 1500,
+                  },
+                }}
+              />
+            </div>
+            <div className="w-[458px]">
+              <Slider
+                className="image flex flex-2 justify-between -mx-2"
+                {...settings}
+              >
+                {product?.images.map((el) => (
+                  <div className="flex-1 p-1 " key={el}>
+                    <img
+                      src={el}
+                      alt="img-detail"
+                      className="h-[143px] w-full object-cover cursor-pointer hover:opacity-90 border-solid border border-gray-200"
+                    />
+                  </div>
+                ))}
+              </Slider>
+            </div>
+          </div>
+          <div className="border-purple-950 border  w-2/5 flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-[30px] font-semibold">{`${formatPrice(
+                product?.price
+              )} VNĐ`}</h2>
+              <span className="text-sm text-main">{`Kho: ${product?.quantity}`}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              {renderStarFromNumber(product?.totalRatings)?.map((el, index) => (
+                <span key={index}>{el}</span>
               ))}
-            </Slider>
+              <span className="text-sm text-main italic">{`Đã bán: (${product?.sold}) cái`}</span>
+            </div>
+            <ul className="list-square text-sm text-gray-500 leading-6 pl-4">
+              {product?.description?.map((el) => (
+                <li key={el}>{el}</li>
+              ))}
+            </ul>
+            <div className="flex flex-col items-center gap-8">
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium">Quantity</span>
+                <SelectQuantity
+                  quantity={quantity}
+                  handleChangeQuantity={handleChangeQuantity}
+                  handleQuantity={handleQuantity}
+                />
+              </div>
+              <Buttons fw>Thêm vào giỏ hàng</Buttons>
+            </div>
+          </div>
+          <div className="w-1/5">
+            {productItemPerPage.map((el) => (
+              <ProductItem
+                key={el.id}
+                title={el.title}
+                sub={el.sub}
+                icon={el.icon}
+              />
+            ))}
           </div>
         </div>
-        <div className="border-purple-950 border  w-2/5">price</div>
-        <div className="border-red-500 border w-1/5">inforation</div>
+        <div className="w-main mx-auto mt-8">
+          <DetailInformation />
+        </div>
+        <div className="w-main mx-auto mt-8">
+          <h3 className="text-[20px] font-semibold py-[15px] border-b-2 border-main">
+            Other Customers also buy:
+          </h3>
+          <CustomSlider products={relatedProducts} normal={true} />
+        </div>
+        <div className="h-[500px] w-full bg-gray-100"></div>
       </div>
-      <div className="h-[500px] w-full bg-gray-100"></div>
-    </div>
+    )
   );
 };
 
