@@ -4,12 +4,20 @@ const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
 
 const createProduct = asyncHandler(async (req, res) => {
-  if (Object.keys(req.body).length === 0) throw new Error("Missing inputs");
-  if (req.body && req.body.title) req.body.slug = slugify(req.body.title);
+  const { title, description, price, brand, category, color } = req.body;
+  const thumb = req.files?.thumb[0]?.path;
+  const images = req.files?.images?.map((file) => file.path);
+  if (!title || !description || !price || !brand || !category || !color)
+    throw new Error("Missing inputs");
+  req.body.slug = slugify(title);
+  if (thumb) req.body.thumb = thumb;
+  if (images) req.body.images = images;
   const newProduct = await Product.create(req.body);
   return res.status(200).json({
     success: newProduct ? true : false,
-    createProduct: newProduct ? newProduct : "Cannot create new product",
+    message: newProduct
+      ? "Create product successfully"
+      : "Cannot create new product",
   });
 });
 
@@ -30,63 +38,63 @@ const getProduct = asyncHandler(async (req, res) => {
 const getProducts = asyncHandler(async (req, res) => {
   let queries = { ...req.query };
 
-  //tach cac truong dac biet ra khoi qury
   const excludeFields = ["limit", "sort", "page", "fields"];
   excludeFields.forEach((el) => delete queries[el]);
 
-  //format lai cac operators cho dung cu phap mogoose
   let queryString = JSON.stringify(queries);
-
-  //   { price: { $gt: 100 } } tim gia tri > 100
-  //   { price: { $gte: 100 } }            >=
-  //   { price: { $lt: 100 } }             <
-  //   { price: { $lte: 100 } }             <=
   queryString = queryString.replace(
     /\b(gte|gt|lt|lte)\b/g,
     (matchedEl) => `$${matchedEl}`
   );
-  const formatedQuries = JSON.parse(queryString);
+  const formatedQueries = JSON.parse(queryString);
   let colorQueryObject = {};
 
-  // Filtering theo title
+  if (req.query.q) {
+    const searchQuery = req.query.q;
+    delete formatedQueries.q;
+    formatedQueries["$or"] = [
+      { title: { $regex: searchQuery, $options: "i" } },
+      { brand: { $regex: searchQuery, $options: "i" } },
+      { color: { $regex: searchQuery, $options: "i" } },
+      { category: { $regex: searchQuery, $options: "i" } },
+    ];
+  }
   if (queries?.title)
-    formatedQuries.title = { $regex: queries.title, $options: "i" };
+    formatedQueries.title = { $regex: queries.title, $options: "i" };
   if (queries?.category)
-    formatedQuries.category = { $regex: queries.category, $options: "i" };
+    formatedQueries.category = { $regex: queries.category, $options: "i" };
 
   if (queries?.color) {
-    delete formatedQuries.color;
+    delete formatedQueries.color;
     const colorArr = queries?.color?.split(",");
     const colorQuery = colorArr.map((el) => ({
       color: { $regex: el, $options: "i" },
     }));
     colorQueryObject = { $or: colorQuery };
   }
-  let q = { ...formatedQuries, ...colorQueryObject };
+
+  let q = { ...formatedQueries, ...colorQueryObject };
   let queryCommand = Product.find(q);
 
-  // Sorting theo gia
+  // Sorting theo giá
   if (req.query.sort) {
-    const sortBy = req.query.sort.split(",").join("  ");
-    queries = queryCommand.sort(sortBy);
+    const sortBy = req.query.sort.split(",").join(" ");
+    queryCommand = queryCommand.sort(sortBy);
   }
 
-  // Fields limit han che truong lay ve
+  // Fields limit hạn chế trường lấy về
   if (req.query.fields) {
     const fields = req.query.fields.split(",").join(" ");
     queryCommand = queryCommand.select(fields);
   }
+
   // Pagination
-  // limit: so object lay vve 1 goi  api
-  // skip: 2
   const page = +req.query.page || 1;
   const limit = +req.query.limit || process.env.LIMIT_PRODUCTS;
   const skip = (page - 1) * limit;
   queryCommand.skip(skip).limit(limit);
 
   // Execute query
-  // so luong sp thoa man dieu kien !== so luong sp trar ve 1 lan goi api
-
   try {
     const response = await queryCommand.exec();
     const counts = await Product.find(q).countDocuments();
@@ -127,7 +135,6 @@ const ratings = asyncHandler(async (req, res) => {
   if (!star || !pid) throw new Error("Missing inputs");
 
   const imageUrls = req.files?.map((file) => file.path) || [];
-  console.log("Uploaded images:", imageUrls);
 
   const ratingProduct = await Product.findById(pid);
   const alreadyRating = ratingProduct?.ratings?.find(

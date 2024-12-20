@@ -4,7 +4,15 @@ const uploadCloud = require("../config/cloundinary.config");
 const { verifyAccessToken, isAdmin } = require("../middlewares/verifyToken");
 
 // Routes
-router.post("/", [verifyAccessToken, isAdmin], ctrl.createProduct);
+router.post(
+  "/",
+  [verifyAccessToken, isAdmin],
+  uploadCloud.fields([
+    { name: "thumb", maxCount: 1 },
+    { name: "images", maxCount: 10 },
+  ]),
+  ctrl.createProduct
+);
 router.get("/", ctrl.getProducts);
 
 // Route ratings với middleware xử lý upload 3 ảnh

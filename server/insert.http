@@ -3,3 +3,6 @@ Post http://localhost:5000/api/insert
 
 ###
 Post http://localhost:5000/api/insert/cate
+
+###
+Post http://localhost:5000/api/user/fake-create-user

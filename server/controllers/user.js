@@ -9,6 +9,7 @@ const sendMail = require("../ultils/sendMail");
 const jwt = require("jsonwebtoken");
 const { response } = require("express");
 const makeToken = require("uniqid");
+const { users } = require("../ultils/constant");
 
 // const register = asyncHandler(async (req, res) => {
 //   const { email, password, firstname, lastname, phone } = req.body;
@@ -102,8 +103,8 @@ const login = asyncHandler(async (req, res) => {
   }
   const response = await User.findOne({ email });
   if (response && (await response.isCorrectPassword(password))) {
-    const { password, role, refreshToken, ...userData } = response.toObject();
-    const accessToken = gennerateAccessToken(response._id, role);
+    const { password, refreshToken, ...userData } = response.toObject();
+    const accessToken = gennerateAccessToken(response._id, response.role);
     const newRefreshToken = gennerateRefreshToken(response._id);
     await User.findByIdAndUpdate(
       response._id,
@@ -117,7 +118,10 @@ const login = asyncHandler(async (req, res) => {
     return res.status(200).json({
       success: true,
       accessToken,
-      userData,
+      userData: {
+        ...userData,
+        role: response.role,
+      },
     });
   } else {
     throw new Error("Invalid credentials!");
@@ -127,7 +131,16 @@ const login = asyncHandler(async (req, res) => {
 // lay thong tin user
 const getCurrent = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const user = await User.findById(_id).select("-refreshToken -password -role");
+  const user = await User.findById(_id, {
+    password: 0,
+    refreshToken: 0,
+  }).populate({
+    path: "cart",
+    populate: {
+      path: "product",
+      select: "title thumb price",
+    },
+  });
   return res.status(200).json({
     success: user ? true : false,
     result: user ? user : "User not found",
@@ -233,20 +246,65 @@ const resetPassword = asyncHandler(async (req, res) => {
 });
 
 const getUsers = asyncHandler(async (req, res) => {
-  const response = await User.find().select("-refreshToken -password -role");
-  return res.status(200).json({
-    success: response ? true : false,
-    users: response,
-  });
+  let queries = { ...req.query };
+  const excludeFields = ["limit", "sort", "page", "fields"];
+  excludeFields.forEach((el) => delete queries[el]);
+  let queryString = JSON.stringify(queries);
+
+  queryString = queryString.replace(
+    /\b(gte|gt|lt|lte)\b/g,
+    (matchedEl) => `$${matchedEl}`
+  );
+  const formatedQuries = JSON.parse(queryString);
+
+  if (queries?.name)
+    formatedQuries.title = { $regex: queries.title, $options: "i" };
+
+  if (req.query.q) {
+    delete formatedQuries.q;
+    formatedQuries["$or"] = [
+      { firstname: { $regex: req.query.q, $options: "i" } },
+      { lastname: { $regex: req.query.q, $options: "i" } },
+      { email: { $regex: req.query.q, $options: "i" } },
+    ];
+  }
+
+  let queryCommand = User.find(formatedQuries);
+
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(",").join("  ");
+    queries = queryCommand.sort(sortBy);
+  }
+
+  if (req.query.fields) {
+    const fields = req.query.fields.split(",").join(" ");
+    queryCommand = queryCommand.select(fields);
+  }
+
+  const page = +req.query.page || 1;
+  const limit = +req.query.limit || process.env.LIMIT_USERS;
+  const skip = (page - 1) * limit;
+  queryCommand.skip(skip).limit(limit);
+
+  try {
+    const response = await queryCommand.exec();
+    const counts = await User.find(formatedQuries).countDocuments();
+    return res.status(200).json({
+      success: response ? true : false,
+      counts,
+      users: response ? response : "Cannot get users",
+    });
+  } catch (err) {
+    throw new Error(err.message);
+  }
 });
 
 const deleteUser = asyncHandler(async (req, res) => {
-  const { _id } = req.query;
-  if (!_id) throw new Error("Missing inputs");
-  const response = await User.findByIdAndDelete(_id);
+  const { uid } = req.params;
+  const response = await User.findByIdAndDelete(uid);
   return res.status(200).json({
     success: response ? true : false,
-    deletedUser: response
+    message: response
       ? `User with email ${response.email} delete`
       : "No user delete",
   });
@@ -254,14 +312,22 @@ const deleteUser = asyncHandler(async (req, res) => {
 
 const updateUser = asyncHandler(async (req, res) => {
   const { _id } = req.user;
+  const { firstname, lastname, phone, email } = req.body;
+  const data = { firstname, lastname, phone, email };
+  if (req.file) {
+    data.avatar = req.file.path;
+  }
+
   if (!_id || Object.keys(req.body).length === 0)
     throw new Error("Missing inputs");
-  const response = await User.findByIdAndUpdate(_id, req.body, {
+  const response = await User.findByIdAndUpdate(_id, data, {
     new: true,
   }).select("-password -role");
   return res.status(200).json({
     success: response ? true : false,
-    updatedUser: response ? response : "Something went wrrong",
+    updatedUser: response
+      ? "Updated user successfully"
+      : "Something went wrrong",
   });
 });
 
@@ -273,7 +339,7 @@ const updateUserByAdmin = asyncHandler(async (req, res) => {
   }).select("-password -role -refreshToken");
   return res.status(200).json({
     success: response ? true : false,
-    updatedUser: response ? response : "Something went wrrong",
+    message: response ? "Updated user successfully" : "Something went wrong",
   });
 });
 
@@ -314,9 +380,9 @@ const updateAddressUser = asyncHandler(async (req, res) => {
 });
 const updateCart = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const { pid, quantity, color } = req.body;
+  const { pid, quantity = 1, color, price, thumbnail, title } = req.body;
 
-  if (!pid || !quantity || !color) throw new Error("Missing inputs");
+  if (!pid || !color) throw new Error("Missing inputs");
 
   // Lấy thông tin giỏ hàng của user
   const user = await User.findById(_id).select("cart");
@@ -326,7 +392,11 @@ const updateCart = asyncHandler(async (req, res) => {
     (el) => el.product.toString() === pid && el.color === color
   );
 
-  if (alreadyProduct) {
+  if (
+    alreadyProduct &&
+    alreadyProduct.price === price &&
+    alreadyProduct.color === color
+  ) {
     // Nếu sản phẩm với màu sắc đó đã có, chỉ cần cộng thêm số lượng
     const response = await User.updateOne(
       {
@@ -343,7 +413,7 @@ const updateCart = asyncHandler(async (req, res) => {
 
     return res.status(200).json({
       success: response.modifiedCount > 0,
-      updatedCart:
+      message:
         response.modifiedCount > 0
           ? "Cart updated successfully"
           : "Failed to update cart",
@@ -352,18 +422,59 @@ const updateCart = asyncHandler(async (req, res) => {
     // Nếu sản phẩm chưa có trong giỏ hàng với màu sắc này, thêm mới vào giỏ
     const response = await User.findByIdAndUpdate(
       _id,
-      { $push: { cart: { product: pid, quantity, color } } },
+      {
+        $push: {
+          cart: { product: pid, quantity, color, price, thumbnail, title },
+        },
+      },
       { new: true }
     );
 
     return res.status(200).json({
       success: response ? true : false,
-      updatedCart: response ? response : "Something went wrong",
+      message: response ? "Product added to cart" : "Something went wrong",
     });
   }
 });
 
+const removeCart = asyncHandler(async (req, res) => {
+  const { pid, color } = req.params; // ID sản phẩm từ tham số yêu cầu
+  const { _id } = req.user; // ID người dùng từ yêu cầu
+  console.log("User ID:", _id);
+  console.log("Product ID to remove:", pid);
+
+  // Cố gắng xóa sản phẩm khỏi giỏ hàng
+  const response = await User.findByIdAndUpdate(
+    _id,
+    { $pull: { cart: { product: pid, color } } },
+    { new: true }
+  );
+
+  // Kiểm tra xem có sản phẩm nào được xóa không
+  if (!response) {
+    return res.status(404).json({
+      success: false,
+      msg: "User not found or product not removed",
+    });
+  }
+
+  return res.status(200).json({
+    success: true,
+    counts: response.cart.length,
+    message: "Product removed from cart",
+  });
+});
+const fakeCreateUser = asyncHandler(async (req, res) => {
+  const userData = require("../ultils/constant").users;
+  const createdUsers = await User.insertMany(userData);
+  return res.status(200).json({
+    success: createdUsers ? true : false,
+    users: createdUsers ? createdUsers : "Something went wrong",
+  });
+});
+
 module.exports = {
+  removeCart,
   register,
   login,
   getCurrent,
@@ -378,4 +489,5 @@ module.exports = {
   updateAddressUser,
   updateCart,
   finalRegister,
+  fakeCreateUser,
 };

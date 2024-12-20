@@ -32,13 +32,17 @@ var userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      default: "user",
+      enum: ["admin", "member"],
+      default: "member",
     },
     cart: [
       {
         product: { type: mongoose.Types.ObjectId, ref: "Product" },
         quantity: Number,
         color: String,
+        price: Number,
+        thumbnail: String,
+        title: String,
       },
     ],
     address: String,
