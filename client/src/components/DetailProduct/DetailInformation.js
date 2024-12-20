@@ -1,6 +1,6 @@
 import React, { memo, useState } from "react";
 import { tabs } from "ultils/constants";
-import { Votebar, Buttons, VoteOptions, CommentDetail } from ".";
+import { Votebar, Buttons, VoteOptions, CommentDetail } from "../index";
 import { renderStarFromNumber } from "ultils/helper";
 import { useDispatch, useSelector } from "react-redux";
 import { showModal } from "store/app/appReducer";
@@ -35,7 +35,7 @@ const DetailInformation = ({
         Swal.fire({
           icon: "success",
           title: "Đánh giá sản phẩm thành công!",
-          position: "top-right",
+          positionL: "middle-center",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: true,

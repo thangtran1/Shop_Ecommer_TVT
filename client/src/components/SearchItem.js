@@ -1,6 +1,6 @@
 import React, { memo, useState, useEffect } from "react";
 import icons from "ultils/icons";
-import { colors, sizes, brands, categories, price } from "ultils/constants";
+import { colors } from "ultils/constants";
 import {
   createSearchParams,
   useNavigate,

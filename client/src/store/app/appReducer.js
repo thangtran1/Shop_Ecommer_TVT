@@ -8,15 +8,17 @@ export const appSlice = createSlice({
     errorMessage: null,
     isShowModal: false,
     modalChildren: null,
+    isShowCart: false,
   },
   reducers: {
     showModal: (state, action) => {
       state.isShowModal = action.payload.isShowModal;
       state.modalChildren = action.payload.modalChildren;
     },
-    // logout: (state) => {
-    //   state.isLoading = false;
-    // },
+    showCart: (state) => {
+      state.isShowCart = !state.isShowCart;
+      state.isShowModal = false;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(actions.apiGetCategories.pending, (state) => {
@@ -36,5 +38,5 @@ export const appSlice = createSlice({
   },
 });
 
-export const { showModal } = appSlice.actions;
+export const { showModal, showCart } = appSlice.actions;
 export default appSlice.reducer;

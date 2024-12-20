@@ -1,11 +1,11 @@
 import React from "react";
 import {
   Sidebar,
-  Banner,
-  BestSeller,
-  DealDaily,
-  FearturedProduct,
   CustomSlider,
+  FearturedProduct,
+  DealDaily,
+  BestSeller,
+  Banner,
 } from "components";
 import { useSelector } from "react-redux";
 import icons from "ultils/icons";

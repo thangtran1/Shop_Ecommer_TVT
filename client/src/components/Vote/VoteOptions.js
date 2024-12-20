@@ -1,7 +1,7 @@
 import React, { memo, useRef, useEffect, useState } from "react";
 import { voteOptions } from "ultils/constants";
 import { FaStar } from "react-icons/fa";
-import Buttons from "./Buttons";
+import Buttons from "../Buttons";
 import { useDispatch } from "react-redux";
 import { showModal } from "store/app/appReducer";
 import icon_comment from "assets/icon_comment.png";

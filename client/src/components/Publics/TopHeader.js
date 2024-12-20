@@ -26,7 +26,7 @@ const TopHeader = () => {
         dispatch(getCurrent());
       }
     }
-  }, [dispatch, current]);
+  }, [dispatch]);
   useEffect(() => {
     if (message) {
       Swal.fire("Oops!", message, "error").then(() => {

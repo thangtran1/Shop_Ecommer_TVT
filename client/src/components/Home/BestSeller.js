@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { apiGetProducts } from "apis/product";
-import { Product, CustomSlider } from ".";
+import { CustomSlider } from "..";
 import banner1 from "assets/banner1.png";
 import banner2 from "assets/banner2.png";
 import { apiGetNewProducts } from "store/products/asyncActions";

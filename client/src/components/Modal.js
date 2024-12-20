@@ -4,14 +4,17 @@ import { showModal } from "store/app/appReducer";
 
 const Modal = ({ children }) => {
   const dispatch = useDispatch();
+
   return (
     <div
-      className="absolute z-50 inset-0 bg-overlay flex justify-center items-center"
+      className="bg-overlay"
       onClick={() =>
         dispatch(showModal({ isShowModal: false, modalChildren: null }))
       }
     >
-      {children}
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        {children}
+      </div>
     </div>
   );
 };

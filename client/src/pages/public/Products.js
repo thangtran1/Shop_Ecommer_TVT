@@ -30,21 +30,14 @@ const Products = () => {
   const [sort, setSort] = useState(sortOptions[0].value);
   const navigate = useNavigate();
   const fetchProducts = async (queries) => {
-    const response = await apiGetProducts(queries);
+    const response = await apiGetProducts({ ...queries, category });
     if (response.success) {
       setProducts(response);
     }
   };
   useEffect(() => {
-    let params = [];
-    for (let i of searchParams.entries()) {
-      params.push(i);
-    }
-    const queries = {};
+    const queries = Object.fromEntries([...searchParams.entries()]);
     let priceQuery1 = {};
-    for (let i of params) {
-      queries[i[0]] = i[1];
-    }
     if (queries.to && queries.from) {
       priceQuery1 = {
         $and: [
@@ -55,17 +48,11 @@ const Products = () => {
       delete queries.price;
     }
 
-    // Xử lý price query
-    const priceQuery = {};
-    if (queries.from) queries.price = { gte: queries.from };
-    if (queries.to) queries.price = { lte: queries.to };
-    delete queries.from;
-    delete queries.to;
-    const q = { ...queries, ...priceQuery, ...priceQuery1 };
+    const q = { ...queries, ...priceQuery1 };
     fetchProducts(q);
     window.scrollTo({
       top: 0,
-      behavior: "smooth", // Thêm hiệu ứng cuộn mượt
+      behavior: "smooth",
     });
   }, [searchParams]);
 

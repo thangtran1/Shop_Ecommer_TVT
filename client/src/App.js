@@ -11,23 +11,43 @@ import {
   Blogs,
   FinalRegister,
   ResetPassword,
+  DetailCart,
 } from "./pages/public";
+import { Checkout } from "./pages/member";
 import path from "./ultils/path";
 import { apiGetCategories } from "./store/app/asyncActions";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Modal } from "./components";
+import Cart from "./components/Publics/Cart";
+import {
+  AdminLayout,
+  ManageProduct,
+  CreateProduct,
+  ManageUser,
+  ManageOrder,
+  Dashboard,
+} from "./pages/admin";
+import { MemberLayout, Personal, Wishlish, History } from "./pages/member";
 function App() {
   const dispatch = useDispatch();
-  const { isShowModal, modalChildren } = useSelector((state) => state.app);
+  const { isShowModal, modalChildren, isShowCart } = useSelector(
+    (state) => state.app
+  );
   useEffect(() => {
     dispatch(apiGetCategories());
   }, [dispatch]);
   return (
-    <div className="font-main relative">
+    <div className="font-main h-screen">
+      {isShowCart && (
+        <div className="bg-overlay-right inset-0 z-50 flex justify-end">
+          <Cart />
+        </div>
+      )}
       {isShowModal && <Modal>{modalChildren}</Modal>}
       <Routes>
+        <Route path={path.CHECKOUT} element={<Checkout />}></Route>
         <Route path={path.PUBLIC} element={<Public />}>
           <Route path={path.HOME} element={<Home />}></Route>
           <Route
@@ -39,8 +59,29 @@ function App() {
           <Route path={path.FAQ} element={<FAQ />}></Route>
           <Route path={path.PRODUCTS} element={<Products />}></Route>
           <Route path={path.RESET_PASSWORD} element={<ResetPassword />}></Route>
+          <Route path={path.ALL} element={<Home />}></Route>
         </Route>
-        <Route path={path.LOGIN} element={<Login />}></Route>
+
+        <Route path={path.ADMIN} element={<AdminLayout />}>
+          <Route path={path.DASHBOARD} element={<Dashboard />}></Route>
+          <Route
+            path={path.MANAGE_PRODUCTS}
+            element={<ManageProduct />}
+          ></Route>
+          <Route
+            path={path.CREATE_PRODUCTS}
+            element={<CreateProduct />}
+          ></Route>
+          <Route path={path.MANAGE_USER} element={<ManageUser />}></Route>
+          <Route path={path.MANAGE_ORDER} element={<ManageOrder />}></Route>
+        </Route>
+        <Route path={path.MEMBER} element={<MemberLayout />}>
+          <Route path={path.PERSONAL} element={<Personal />}></Route>
+          <Route path={path.WISHLIST} element={<Wishlish />}></Route>
+          <Route path={path.DETAIL_CART} element={<DetailCart />}></Route>
+          <Route path={path.BUY_HISTORY} element={<History />}></Route>
+        </Route>
+        <Route path={path.LOGIN} element={<Login id="login" />}></Route>
         <Route path={path.FINAL_REGISTER} element={<FinalRegister />}></Route>
       </Routes>
       <ToastContainer

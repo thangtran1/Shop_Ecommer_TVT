@@ -2,7 +2,7 @@ import React, { useState, useEffect, memo } from "react";
 import icons from "ultils/icons";
 import { apiGetProducts } from "apis/product";
 import { formatMoney, renderStarFromNumber } from "ultils/helper";
-import CountDown from "./CountDown";
+import CountDown from "../CountDown";
 
 const { MdOutlineStar, IoMdMenu } = icons;
 let interval;

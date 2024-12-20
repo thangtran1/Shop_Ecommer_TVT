@@ -39,3 +39,42 @@ export const apiGetCurrent = () =>
     url: "/user/current/",
     method: "get",
   });
+
+export const apiGetUsers = (queries) =>
+  axios({
+    url: `/user/`,
+    method: "get",
+    params: queries,
+  });
+
+export const apiUpdateUser = (payload, uid) =>
+  axios({
+    url: `/user/` + uid,
+    method: "put",
+    data: payload,
+  });
+
+export const apiDeleteUser = (uid) =>
+  axios({
+    url: `/user/` + uid,
+    method: "delete",
+  });
+
+export const apiUpdateCurrent = (payload) =>
+  axios({
+    url: "/user/current",
+    method: "put",
+    data: payload,
+  });
+
+export const apiUpdateCart = (payload) =>
+  axios({
+    url: "/user/cart",
+    method: "put",
+    data: payload,
+  });
+export const apiRemoveCart = (pid, color) =>
+  axios({
+    url: `/user/removecart/${pid}/${color}`,
+    method: "delete",
+  });

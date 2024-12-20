@@ -11,7 +11,10 @@ export const createSlug = (string) =>
 
 export const formatMoney = (number) => {
   if (number === undefined || number === null) return "0";
-  return Number(number.toFixed(1)).toLocaleString();
+  return Number(number.toFixed(1)).toLocaleString("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
 };
 
 export const renderStarFromNumber = (number) => {
@@ -27,15 +30,19 @@ export const renderStarFromNumber = (number) => {
 
 export const validate = (payload, setInValidFields) => {
   let invalidCount = 0;
-  const formatPayload = Object.entries(payload);
+  const invalidFields = []; // Danh sách các trường không hợp lệ
 
-  for (let array of formatPayload) {
-    if (array[1].trim() === "") {
+  for (let [key, value] of Object.entries(payload)) {
+    if (typeof value === "string" && value.trim() === "") {
+      invalidFields.push({ name: key, message: `${key} is required.` });
+      invalidCount++;
+    } else if (value === undefined || value === null) {
+      invalidFields.push({ name: key, message: `${key} is required.` });
       invalidCount++;
     }
   }
 
-  setInValidFields(invalidCount);
+  setInValidFields(invalidFields); // Gán danh sách các trường không hợp lệ vào state
   return invalidCount;
 };
 
@@ -46,4 +53,16 @@ export const formatPrice = (price) => {
 export const generateRange = (start, end) => {
   const length = end + 1 - start;
   return Array.from({ length }, (_, index) => start + index);
+};
+
+export const fileToBase64 = (file) => {
+  if (!file) return;
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      resolve(reader.result);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 };

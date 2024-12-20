@@ -217,3 +217,132 @@ export const voteOptions = [
   { id: 4, text: "Excellent", value: "excellent" },
   { id: 5, text: "Perfect", value: "perfect" },
 ];
+
+const { FaTachometerAlt } = icons;
+export const adminSidebar = [
+  {
+    id: 1,
+    type: "SINGLE",
+    text: "Dashboard",
+    path: `/${path.ADMIN}/${path.DASHBOARD}`,
+    icon: <FaTachometerAlt size={20} />,
+  },
+  {
+    id: 2,
+    type: "SINGLE",
+    text: "Manage Users",
+    path: `/${path.ADMIN}/${path.MANAGE_USER}`,
+    icon: <FaTachometerAlt size={20} />,
+    // submenu: [
+    //   {
+    //     id: 1,
+    //     text: "Create User",
+    //     path: `/${path.ADMIN}/${path.PRODUCTS}`,
+    //   },
+    //   {
+    //     id: 2,
+    //     text: "Manage User",
+    //     path: `/${path.ADMIN}/${path.CREATE_PRODUCTS}`,
+    //   },
+    // ],
+  },
+  {
+    id: 3,
+    type: "PARENT",
+    text: "Manage Products",
+    path: `/${path.ADMIN}/${path.MANAGE_PRODUCTS}`,
+    icon: <FaTachometerAlt size={20} />,
+    submenu: [
+      {
+        id: 1,
+        text: "Create Product",
+        path: `/${path.ADMIN}/${path.CREATE_PRODUCTS}`,
+      },
+      {
+        id: 2,
+        text: "Manage Product",
+        path: `/${path.ADMIN}/${path.MANAGE_PRODUCTS}`,
+      },
+    ],
+  },
+  {
+    id: 4,
+    type: "SINGLE",
+    text: "Manage Categories",
+    path: `/${path.ADMIN}/${path.MANAGE_CATEGORIES}`,
+    icon: <FaTachometerAlt size={20} />,
+  },
+  {
+    id: 5,
+    type: "SINGLE",
+    text: "Manage Blogs",
+    path: `/${path.ADMIN}/${path.MANAGE_BLOGS}`,
+    icon: <FaTachometerAlt size={20} />,
+    // submenu: [
+    //   {
+    //     id: 1,
+    //     text: "Create Blog",
+    //     path: `/${path.ADMIN}/${path.MANAGE_BLOGS}/${path.CREATE_BLOG}`,
+    //   },
+    // ],
+  },
+  {
+    id: 6,
+    type: "SINGLE",
+    text: "Manage Orders",
+    path: `/${path.ADMIN}/${path.MANAGE_ORDER}`,
+    icon: <FaTachometerAlt size={20} />,
+  },
+];
+export const memberSidebar = [
+  {
+    id: 1,
+    type: "SINGLE",
+    text: "Personal",
+    path: `/${path.MEMBER}/${path.PERSONAL}`,
+    icon: <FaTachometerAlt size={20} />,
+  },
+  {
+    id: 2,
+    type: "SINGLE",
+    text: "My cart",
+    path: `/${path.MEMBER}/${path.DETAIL_CART}`,
+    icon: <FaTachometerAlt size={20} />,
+  },
+  {
+    id: 3,
+    type: "SINGLE",
+    text: "Buy history",
+    path: `/${path.MEMBER}/${path.BUY_HISTORY}`,
+    icon: <FaTachometerAlt size={20} />,
+  },
+  {
+    id: 4,
+    type: "SINGLE",
+    text: "Wishlist",
+    path: `/${path.MEMBER}/${path.WISHLIST}`,
+    icon: <FaTachometerAlt size={20} />,
+  },
+];
+
+export const roles = [
+  {
+    code: "admin",
+    value: "Admin",
+  },
+  {
+    code: "member",
+    value: "Member",
+  },
+];
+
+export const blockStatus = [
+  {
+    code: true,
+    value: "Blocked",
+  },
+  {
+    code: false,
+    value: "Active",
+  },
+];

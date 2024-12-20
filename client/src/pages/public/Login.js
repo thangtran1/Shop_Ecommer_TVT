@@ -7,28 +7,35 @@ import {
   apiForgotPassword,
   apiFinalRegister,
 } from "apis/user";
+import withBase from "hocs/withBase";
 import Swal from "sweetalert2";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import path from "ultils/path";
-import { useDispatch } from "react-redux";
 import { login, logout } from "store/user.js/userSlice";
 import { toast } from "react-toastify";
-const Login = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+import { showModal } from "store/app/appReducer";
+import { Loading } from "components";
+import { useSearchParams } from "react-router-dom";
+const Login = (props) => {
   const [form] = Form.useForm();
   const [isRegister, setIsRegister] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [token, setToken] = useState("");
   const [isVerifyEmail, setIsVerifyEmail] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get("redirect");
   const onFinish = async (values) => {
     const { firstname, lastname, phone, ...data } = values;
 
-    setIsLoading(true);
     try {
       if (isRegister) {
+        props.dispatch(
+          showModal({ isShowModal: true, modalChildren: <Loading /> })
+        );
         const response = await apiRegister(values);
+        props.dispatch(showModal({ isShowModal: false, modalChildren: null }));
+
         if (response.success) {
           setIsVerifyEmail(true);
         } else {
@@ -37,8 +44,8 @@ const Login = () => {
       } else {
         const response = await apiLogin(data);
         if (response.success) {
-          navigate(`/${path.HOME}`);
-          dispatch(
+          props.navigate(redirect || `/${path.HOME}`);
+          props.dispatch(
             login({
               isLoggedIn: true,
               userData: response.userData,
@@ -52,7 +59,7 @@ const Login = () => {
     } catch (error) {
       Swal.fire("Error", "Something went wrong!", "error");
     } finally {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 
@@ -82,8 +89,8 @@ const Login = () => {
 
   const handleLogout = () => {
     window.localStorage.removeItem("persist:shop/users");
-    dispatch(logout());
-    navigate(`/${path.HOME}`);
+    props.dispatch(logout());
+    props.navigate(`/${path.HOME}`);
     window.location.reload();
   };
   return (
@@ -307,4 +314,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default withBase(Login);

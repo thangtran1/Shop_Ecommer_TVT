@@ -1,18 +1,25 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, createSearchParams } from "react-router-dom";
 import { apiGetProductDetail, apiGetProducts } from "apis/product";
 import {
   Breadcrumb,
-  SelectQuantity,
   Buttons,
+  CustomSlider,
   ProductItem,
   DetailInformation,
-  CustomSlider,
+  SelectQuantity,
 } from "components";
 import Slider from "react-slick";
 import ReactImageMagnify from "react-image-magnify";
 import { formatPrice, renderStarFromNumber } from "ultils/helper";
 import { productItemPerPage } from "ultils/constants";
+import withBase from "hocs/withBase";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import { apiUpdateCart } from "apis/user";
+import path from "ultils/path";
+import { getCurrent } from "store/user.js/asyncAction";
 const settings = {
   dots: false,
   infinite: false,
@@ -20,8 +27,9 @@ const settings = {
   slidesToShow: 3,
   slidesToScroll: 1,
 };
-const DetailProduct = () => {
+const DetailProduct = ({ location, navigate, dispatch }) => {
   const { pid, title } = useParams();
+  const { current } = useSelector((state) => state.user);
   const [currentImage, setCurrentImage] = useState(null);
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -76,6 +84,42 @@ const DetailProduct = () => {
   const reRender = useCallback(() => {
     setUpdate(!update);
   }, [update]);
+  const handleAddToCart = async () => {
+    if (!current)
+      return Swal.fire({
+        title: "Please login to add to cart",
+        icon: "warning",
+        confirmButtonText: "Login",
+        cancelButtonText: "Cancel",
+        showCancelButton: true,
+        cancelButtonColor: "#d33",
+        confirmButtonColor: "#3085d6",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed)
+          navigate({
+            pathname: `/${path.LOGIN}`,
+            search: createSearchParams({
+              redirect: window.location.pathname,
+            }).toString(),
+          });
+      });
+    const response = await apiUpdateCart({
+      pid: product?._id || "",
+      color: product?.color || "",
+      quantity: quantity || 1,
+      price: product?.price,
+      thumbnail: product?.thumb,
+      title: product?.title,
+    });
+    if (response.success) {
+      toast.success(response.message || "Add to cart successfully");
+      dispatch(getCurrent());
+    } else {
+      toast.error(response.message || "Add to cart failed");
+    }
+    console.log(response, "response111111");
+  };
   return (
     product && (
       <div className="w-full ">
@@ -87,7 +131,7 @@ const DetailProduct = () => {
         </div>
         <div className="w-main mx-auto mt-4 flex">
           <div className=" flex flex-col gap-4 w-2/5">
-            <div className="w-[458px] h-[458px] border overflow-hidden ">
+            <div className="w-[458px] h-[458px] flex items-center  border overflow-hidden ">
               <ReactImageMagnify
                 {...{
                   smallImage: {
@@ -138,9 +182,18 @@ const DetailProduct = () => {
               <span className="text-sm text-main italic">{`Đã bán: (${product?.sold}) cái`}</span>
             </div>
             <ul className="list-square text-sm text-gray-500 leading-6 pl-4">
-              {product?.description?.map((el) => (
-                <li key={el}>{el}</li>
-              ))}
+              {product?.description?.length > 1 &&
+                product?.description?.map((el) => (
+                  <li className="leading-6" key={el}>
+                    {el}
+                  </li>
+                ))}
+              {product?.description?.length === 1 && (
+                <div
+                  className="text-sm text-gray-500 line-clamp-[10] mb-8 justify-normal"
+                  dangerouslySetInnerHTML={{ __html: product?.description }}
+                />
+              )}
             </ul>
             <div className="flex flex-col items-center gap-8">
               <div className="flex items-center gap-4">
@@ -151,7 +204,9 @@ const DetailProduct = () => {
                   handleQuantity={handleQuantity}
                 />
               </div>
-              <Buttons fw>Thêm vào giỏ hàng</Buttons>
+              <Buttons handleOnclick={handleAddToCart} fw>
+                Thêm vào giỏ hàng
+              </Buttons>
             </div>
           </div>
           <div className="w-1/5">
@@ -185,4 +240,4 @@ const DetailProduct = () => {
   );
 };
 
-export default DetailProduct;
+export default withBase(DetailProduct);
