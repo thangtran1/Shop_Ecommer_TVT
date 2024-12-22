@@ -7,34 +7,17 @@ const slugify = require("slugify");
 
 const createOrder = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const { coupon } = req.body;
-  const userCart = await User.findById(_id)
-    .select("cart")
-    .populate("cart.product", "title price");
-  const products = userCart?.cart?.map((el) => ({
-    product: el.product._id,
-    count: el.quantity,
-    color: el.color,
-  }));
-  let total = userCart?.cart?.reduce(
-    (sum, el) => el.product.price * el.quantity + sum,
-    0
-  );
-  const createData = { products, total, orderBy: _id };
-  if (coupon) {
-    const selectedCoupon = await Coupon.findById(coupon);
-    total =
-      Math.round((total * (1 - +selectedCoupon?.disCount / 100)) / 1000) *
-        1000 || total;
-    createData.total = total;
-    createData.coupon = coupon;
+  const { products, total, address, status } = req.body;
+  if (address) {
+    await User.findByIdAndUpdate(_id, { address, cart: [] });
   }
+  const data = { products, total, address, orderBy: _id };
+  if (status) data.status = status;
+  const response = await Order.create(data);
 
-  const response = await Order.create(createData);
   return res.status(200).json({
-    success: response ? true : false,
+    success: true,
     result: response ? response : "Something went wrong",
-    // userCart,
   });
 });
 
