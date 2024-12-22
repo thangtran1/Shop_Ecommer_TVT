@@ -25,8 +25,6 @@ const Product = ({
   dispatch,
   location,
 }) => {
-  console.log("productData", productData);
-
   const [isShowOption, setIsShowOption] = useState(false);
   const { current } = useSelector((state) => state.user);
   const handlerClickOption = async (e, type) => {

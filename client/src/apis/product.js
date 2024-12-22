@@ -42,3 +42,13 @@ export const apiUpdateProduct = (payload, pid) => {
     data: payload, // Gửi payload đúng định dạng
   });
 };
+
+export const apiCreateOrder = (payload) => {
+  console.log("apiCreateOrder", payload);
+
+  return axios({
+    url: "/order",
+    method: "post",
+    data: payload,
+  });
+};

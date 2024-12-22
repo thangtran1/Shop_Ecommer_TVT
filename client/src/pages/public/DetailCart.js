@@ -8,7 +8,9 @@ import Buttons from "components/Buttons";
 import { Link } from "react-router-dom";
 import path from "ultils/path";
 const DetailCart = ({ location }) => {
-  const { currentCart } = useSelector((state) => state.user);
+  const { currentCart, isLoggedIn } = useSelector((state) => state.user);
+  console.log("isLoggedIn", isLoggedIn);
+
   const [cartItems, setCartItems] = useState(currentCart || []);
   console.log("currentCart", currentCart);
 
@@ -54,13 +56,23 @@ const DetailCart = ({ location }) => {
             </div>
 
             <span className="flex justify-end">
-              <Link
-                target="_blank"
-                className="bg-main text-white px-4 py-2 rounded-md"
-                to={`/${path.CHECKOUT}`}
-              >
-                Checkout
-              </Link>
+              {isLoggedIn ? (
+                // Kiểm tra trạng thái đăng nhập
+                <Link
+                  target="_blank"
+                  className="bg-main text-white px-4 py-2 rounded-md"
+                  to={`/${path.CHECKOUT}`}
+                >
+                  Checkout
+                </Link>
+              ) : (
+                <Link
+                  className="bg-main text-white px-4 py-2 rounded-md"
+                  to={`/${path.LOGIN}`}
+                >
+                  Đăng nhập để thanh toán
+                </Link>
+              )}
             </span>
           </div>
         </div>

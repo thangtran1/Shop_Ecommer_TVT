@@ -37,3 +37,5 @@ export { default as MemberSiderbar } from "./Sidebar/MemberSiderbar";
 export { default as QuickView } from "./Products/QuickView";
 export { default as Cart } from "./Publics/Cart";
 export { default as OrderItem } from "./Products/OrderItem";
+export { default as Paypal } from "./common/Paypal";
+export { default as PaymentSuccess } from "./common/PaymentSuccess";
