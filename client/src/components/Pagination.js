@@ -7,6 +7,7 @@ const Pagination = ({
   currentPage = 1,
   siblingCount = 1,
   category,
+  onPageChange,
 }) => {
   const paginationArray = usePagination(totalCounts, currentPage, siblingCount);
   const [params] = useSearchParams();
@@ -32,6 +33,7 @@ const Pagination = ({
             key={pageNumber}
             pageNumber={pageNumber}
             currentPage={currentPageFromURL}
+            onClick={() => onPageChange(pageNumber)}
           >
             {pageNumber}
           </PagiItem>

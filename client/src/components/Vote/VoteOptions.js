@@ -1,24 +1,24 @@
-import React, { memo, useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { voteOptions } from "ultils/constants";
 import { FaStar } from "react-icons/fa";
 import Buttons from "../Buttons";
-import { useDispatch } from "react-redux";
 import { showModal } from "store/app/appReducer";
 import icon_comment from "assets/icon_comment.png";
 import { FaCamera } from "react-icons/fa";
 import { toast } from "react-toastify";
+import withBase from "hocs/withBase";
 const VoteOptions = ({
   nameProduct,
   handleSubmitVoteOptions,
   pid,
   isLoading,
+  dispatch,
 }) => {
   const modalRef = useRef();
   const [chooseStar, setChooseStar] = useState(null);
   const [hoverStar, setHoverStar] = useState(null);
   const [comment, setComment] = useState("");
   const [images, setImages] = useState([]);
-  const dispatch = useDispatch();
 
   const MAX_IMAGES = 3;
   useEffect(() => {
@@ -58,7 +58,6 @@ const VoteOptions = ({
 
     if (files.length > remainingSlots) {
       alert(`Bạn chỉ có thể tải lên thêm ${remainingSlots} hình ảnh nữa`);
-      // Chỉ lấy số lượng ảnh còn được phép
       const allowedFiles = files.slice(0, remainingSlots);
       setImages((prev) => [...prev, ...allowedFiles]);
       return;
@@ -210,4 +209,4 @@ const VoteOptions = ({
   );
 };
 
-export default memo(VoteOptions);
+export default withBase(VoteOptions);

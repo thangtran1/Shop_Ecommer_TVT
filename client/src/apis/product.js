@@ -1,5 +1,4 @@
 import axios from "../axios";
-
 export const apiGetProducts = (params) =>
   axios({
     url: "/product/",
@@ -11,7 +10,6 @@ export const apiGetProductDetail = (pid) =>
     url: `/product/` + pid,
     method: "get",
   });
-
 export const apiRatings = (data) =>
   axios({
     url: "/product/ratings",
@@ -27,28 +25,28 @@ export const apiCreateProduct = (data) =>
     method: "post",
     data,
   });
-
 export const apiDeleteProduct = (pid) =>
   axios({
     url: `/product/` + pid,
     method: "delete",
   });
-
 export const apiUpdateProduct = (payload, pid) => {
-  console.log("Payload to be sent:", payload); // Log payload để kiểm tra
   return axios({
-    url: `/product/` + pid.toString(), // Đảm bảo pid là chuỗi
+    url: `/product/` + pid.toString(),
     method: "put",
-    data: payload, // Gửi payload đúng định dạng
+    data: payload,
   });
 };
-
 export const apiCreateOrder = (payload) => {
-  console.log("apiCreateOrder", payload);
-
   return axios({
     url: "/order",
     method: "post",
     data: payload,
   });
 };
+export const apiGetUserOrders = (params) =>
+  axios({
+    url: "/order",
+    method: "get",
+    params,
+  });

@@ -1,16 +1,16 @@
-import React, { memo, Fragment, useState } from "react";
+import React, { Fragment, useState } from "react";
 import avatar from "assets/avatar_default.jpg";
 import { memberSidebar } from "ultils/constants";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
-import { useSelector } from "react-redux";
+import { TbTruckDelivery } from "react-icons/tb";
 import clx from "classnames";
+import withBase from "hocs/withBase";
 const activeStyle =
   "flex items-center gap-2 px-4 py-4 text-gray-200 bg-gray-400";
 const inactiveStyle =
   "flex items-center gap-2 px-4 py-4 text-gray-200 hover:bg-gray-400";
-const MemberSiderbar = () => {
-  const { current } = useSelector((state) => state.user);
+const MemberSiderbar = ({ current }) => {
   const [isOpen, setIsOpen] = useState([]);
   const handleShowSubmenu = (id) => {
     if (isOpen.some((item) => item === id)) {
@@ -98,6 +98,7 @@ const MemberSiderbar = () => {
           to={`/`}
           className={clx("flex items-center gap-2 px-4 py-4 text-gray-200")}
         >
+          <TbTruckDelivery size={20} />
           <span>Go to Home</span>
         </NavLink>
       </div>
@@ -105,4 +106,4 @@ const MemberSiderbar = () => {
   );
 };
 
-export default memo(MemberSiderbar);
+export default withBase(MemberSiderbar);

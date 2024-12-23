@@ -1,6 +1,5 @@
 import React, { memo } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-
 const MarkdownEditer = ({
   label,
   value,
@@ -11,21 +10,19 @@ const MarkdownEditer = ({
   errors,
 }) => {
   const handleChange = (content) => {
-    changeValue(content); // Truyền nội dung trực tiếp vào changeValue
-    // Kiểm tra nếu nội dung trống và cập nhật invalidFields
+    changeValue(content);
     if (content.trim() === "") {
       setInvalidFields((prev) => ({ ...prev, [name]: true }));
     } else {
       setInvalidFields((prev) => ({ ...prev, [name]: false }));
     }
   };
-
   return (
     <div className="flex flex-col gap-2">
       <span className="text-main text-sm">{label}</span>
       <Editor
         apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
-        initialValue={value} // Truyền giá trị ban đầu vào
+        initialValue={value}
         init={{
           height: 500,
           menubar: true,
@@ -39,7 +36,7 @@ const MarkdownEditer = ({
           content_style:
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
         }}
-        onChange={(e) => handleChange(e.target.getContent())} // Sử dụng onChange để truyền nội dung thay đổi
+        onChange={(e) => handleChange(e.target.getContent())}
         onFocus={() => setInvalidFields((prev) => ({ ...prev, [name]: false }))}
       />
       {errors[name] && (
@@ -53,5 +50,4 @@ const MarkdownEditer = ({
     </div>
   );
 };
-
 export default memo(MarkdownEditer);

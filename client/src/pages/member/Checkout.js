@@ -3,7 +3,6 @@ import img from "assets/payment-image.jpg";
 import { useSelector, useDispatch } from "react-redux";
 import { formatMoney } from "ultils/helper";
 import { Paypal, PaymentSuccess } from "components";
-import InputForm from "components/InputForm";
 import { useForm } from "react-hook-form";
 import { getCurrent } from "store/user.js/asyncAction";
 import withBase from "hocs/withBase";
@@ -12,18 +11,6 @@ const Checkout = () => {
   const { currentCart, current } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [isSuccess, setIsSuccess] = useState(false);
-  const navigate = useNavigate();
-  const {
-    register,
-    formState: { errors },
-    watch,
-    setValue,
-  } = useForm();
-  const address = watch("address");
-
-  useEffect(() => {
-    setValue("address", current?.address);
-  }, [current?.address]);
   useEffect(() => {
     if (isSuccess) {
       dispatch(getCurrent());
@@ -67,7 +54,7 @@ const Checkout = () => {
             </table>
           </div>
           <div className="flex flex-col flex-1 justify-between">
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
               <div>
                 <span className="font-medium text-sm">SubTotal: </span>
                 <span className="font-medium ">
@@ -79,46 +66,37 @@ const Checkout = () => {
                   )}
                 </span>
               </div>
-              <div>
-                <InputForm
-                  label="Your Address"
-                  register={register}
-                  errors={errors}
-                  id="address"
-                  validate={{ required: "Address is required" }}
-                  placeholder="Please fill in your address"
-                  type="text"
-                  style="text-sm"
-                />
+              <div className="flex  gap-2">
+                <span className="font-medium text-sm">Address: </span>
+                <span className="font-medium text-main ">
+                  {current?.address}
+                </span>
               </div>
             </div>
-            {address && address.length > 5 && (
-              <div className="mt-auto w-full mx-auto">
-                <Paypal
-                  payload={{
-                    address,
-                    products: currentCart,
-                    total:
-                      Math.round(
-                        +currentCart?.reduce(
-                          (acc, item) =>
-                            acc + item.product.price * item.quantity,
-                          0
-                        ) / 23500
-                      ) * 1000,
-                  }}
-                  setIsSuccess={setIsSuccess}
-                  amount={
+            <div className="mt-auto w-full mx-auto">
+              <Paypal
+                payload={{
+                  address: current?.address,
+                  products: currentCart,
+                  total:
                     Math.round(
                       +currentCart?.reduce(
                         (acc, item) => acc + item.product.price * item.quantity,
                         0
                       ) / 23500
-                    ) * 1000
-                  }
-                />
-              </div>
-            )}
+                    ) * 1000,
+                }}
+                setIsSuccess={setIsSuccess}
+                amount={
+                  Math.round(
+                    +currentCart?.reduce(
+                      (acc, item) => acc + item.product.price * item.quantity,
+                      0
+                    ) / 23500
+                  ) * 1000
+                }
+              />
+            </div>
           </div>
         </div>
       </div>

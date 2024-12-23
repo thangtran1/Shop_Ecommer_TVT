@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-// import { ProductCard } from "./";
+import React, { useState, useEffect, memo } from "react";
 import section1 from "assets/section1.png";
 import section2 from "assets/section2.png";
 import section3 from "assets/section3.png";
@@ -12,8 +11,6 @@ const FearturedProduct = () => {
     const response = await apiGetProducts({
       limit: 9,
       sort: "-totalRatings",
-      //   page: Math.random() * 3,
-      // totalRatings: 5,
     });
     if (response?.success) setProducts(response.products);
   };
@@ -29,10 +26,12 @@ const FearturedProduct = () => {
         {products?.map((el) => (
           <ProductCard
             key={el._id}
-            thumb={el.thumb}
+            pid={el._id}
+            category={el.category}
             title={el.title}
-            totalRatings={el.totalRatings}
+            thumb={el.thumb}
             price={el.price}
+            productData={el}
           />
         ))}
       </div>
@@ -61,5 +60,4 @@ const FearturedProduct = () => {
     </div>
   );
 };
-
-export default FearturedProduct;
+export default memo(FearturedProduct);

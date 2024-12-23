@@ -1,5 +1,6 @@
 import React from "react";
 import banner from "assets/banner3.png";
+import withBase from "hocs/withBase";
 const Banner = () => {
   return (
     <div className="w-full ">
@@ -11,4 +12,4 @@ const Banner = () => {
     </div>
   );
 };
-export default Banner;
+export default withBase(Banner);

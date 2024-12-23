@@ -5,15 +5,39 @@ import withBase from "hocs/withBase";
 import { formatMoney } from "ultils/helper";
 import OrderItem from "components/Products/OrderItem";
 import Buttons from "components/Buttons";
-import { Link } from "react-router-dom";
+import { createSearchParams, Link, useNavigate } from "react-router-dom";
 import path from "ultils/path";
+import Swal from "sweetalert2";
 const DetailCart = ({ location }) => {
-  const { currentCart, isLoggedIn } = useSelector((state) => state.user);
-  console.log("isLoggedIn", isLoggedIn);
+  const navigate = useNavigate();
+  const { currentCart, isLoggedIn, current } = useSelector(
+    (state) => state.user
+  );
 
   const [cartItems, setCartItems] = useState(currentCart || []);
-  console.log("currentCart", currentCart);
-
+  const handleCheckout = () => {
+    if (!current?.address) {
+      Swal.fire({
+        title: "Almost!",
+        icon: "info",
+        text: "Bạn cần cập nhật địa chỉ để thanh toán",
+        showConfirmButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Go update address",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate(
+            `/${path.MEMBER}/${path.PERSONAL}?${createSearchParams({
+              redirect: location.pathname,
+            }).toString()}`
+          );
+        }
+      });
+    } else {
+      window.open(`/${path.CHECKOUT}`, "_blank");
+    }
+  };
   return (
     <div className="w-full">
       {/* Header Breadcrumb */}
@@ -57,15 +81,15 @@ const DetailCart = ({ location }) => {
 
             <span className="flex justify-end">
               {isLoggedIn ? (
-                // Kiểm tra trạng thái đăng nhập
-                <Link
-                  target="_blank"
-                  className="bg-main text-white px-4 py-2 rounded-md"
-                  to={`/${path.CHECKOUT}`}
-                >
-                  Checkout
-                </Link>
+                <Buttons handleOnclick={handleCheckout}>Checkout</Buttons>
               ) : (
+                // <Link
+                //   target="_blank"
+                //   className="bg-main text-white px-4 py-2 rounded-md"
+                //   to={`/${path.CHECKOUT}`}
+                // >
+                //   Checkout
+                // </Link>
                 <Link
                   className="bg-main text-white px-4 py-2 rounded-md"
                   to={`/${path.LOGIN}`}

@@ -1,6 +1,5 @@
 import React, { memo } from "react";
 import icons from "ultils/icons";
-
 const { MdOutlineMail } = icons;
 const Footer = () => {
   return (
@@ -33,7 +32,6 @@ const Footer = () => {
             <h3 className="mb-[20px]  text-[15px] font-medium border-l-2 border-main pl-[15px]">
               About Us
             </h3>
-
             <span>
               <span>Address: </span>
               <span className="opacity-50">
@@ -79,5 +77,4 @@ const Footer = () => {
     </div>
   );
 };
-
 export default memo(Footer);

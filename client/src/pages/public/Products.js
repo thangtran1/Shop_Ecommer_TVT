@@ -29,12 +29,17 @@ const Products = () => {
   const [searchParams] = useSearchParams();
   const [sort, setSort] = useState(sortOptions[0].value);
   const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1);
+
   const fetchProducts = async (queries) => {
-    const response = await apiGetProducts({ ...queries, category });
+    if (category && category !== "products") queries.category = category;
+    const response = await apiGetProducts({ ...queries });
     if (response.success) {
       setProducts(response);
     }
   };
+  console.log(products, "products");
+
   useEffect(() => {
     const queries = Object.fromEntries([...searchParams.entries()]);
     let priceQuery1 = {};
@@ -49,6 +54,9 @@ const Products = () => {
     }
 
     const q = { ...queries, ...priceQuery1 };
+    const pageFromURL = +queries.page || 1;
+    setCurrentPage(pageFromURL);
+
     fetchProducts(q);
     window.scrollTo({
       top: 0,
@@ -79,6 +87,15 @@ const Products = () => {
       });
     }
   }, [category, navigate, sort]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    navigate({
+      pathname: `/${category}`,
+      search: createSearchParams({ ...searchParams, page }).toString(),
+    });
+  };
+
   return (
     <div className="w-full">
       <div className="h-[81px] flex items-center justify-center bg-gray-100">
@@ -138,12 +155,17 @@ const Products = () => {
           columnClassName="my-masonry-grid_column"
         >
           {products?.products?.map((el) => (
-            <Product key={el._id} productData={el} normal={true} />
+            <Product key={el._id} productData={el} normal={true} pid={el._id} />
           ))}
         </Masonry>
       </div>
       <div className=" w-main mx-auto my-4 flex justify-end  ">
-        <Pagination category={category} totalCounts={products?.counts} />
+        <Pagination
+          category={category}
+          totalCounts={products?.counts}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

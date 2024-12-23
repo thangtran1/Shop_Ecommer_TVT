@@ -36,5 +36,4 @@ const InputForm = ({
     </div>
   );
 };
-
 export default memo(InputForm);

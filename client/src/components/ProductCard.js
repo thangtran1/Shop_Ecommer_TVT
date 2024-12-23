@@ -1,9 +1,23 @@
 import React from "react";
 import { formatMoney, renderStarFromNumber } from "ultils/helper";
-
-const ProductCard = ({ title, totalRatings, price, thumb }) => {
+import withBase from "hocs/withBase";
+const ProductCard = ({
+  title,
+  totalRatings,
+  price,
+  thumb,
+  category,
+  productData,
+  navigate,
+}) => {
   return (
-    <div className="w-1/3 flex-auto px-[10px] mt-[20px]  ">
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+        navigate(`/${category?.toLowerCase()}/${productData?._id}/${title}`);
+      }}
+      className="w-1/3 cursor-pointer flex-auto px-[10px] mt-[20px]  "
+    >
       <div className="flex border">
         <img
           src={thumb}
@@ -24,4 +38,4 @@ const ProductCard = ({ title, totalRatings, price, thumb }) => {
   );
 };
 
-export default ProductCard;
+export default withBase(ProductCard);

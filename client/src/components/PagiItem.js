@@ -1,19 +1,11 @@
 import React from "react";
-import {
-  useSearchParams,
-  useNavigate,
-  createSearchParams,
-  useLocation,
-} from "react-router-dom";
+import { useSearchParams, createSearchParams } from "react-router-dom";
 import withBase from "hocs/withBase";
-const PagiItem = ({ pageNumber, currentPage, category }) => {
+const PagiItem = ({ pageNumber, navigate, location }) => {
   const [params] = useSearchParams();
-  const navigate = useNavigate();
-  const location = useLocation();
   const handleClick = () => {
     const queries = Object.fromEntries([...params.entries()]);
     queries.page = pageNumber;
-
     navigate({
       pathname: location.pathname,
       search: createSearchParams(queries).toString(),
@@ -33,5 +25,4 @@ const PagiItem = ({ pageNumber, currentPage, category }) => {
     </button>
   );
 };
-
 export default withBase(PagiItem);

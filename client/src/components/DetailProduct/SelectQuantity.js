@@ -1,5 +1,5 @@
-import React, { memo } from "react";
-
+import React from "react";
+import withBase from "hocs/withBase";
 const SelectQuantity = ({ quantity, handleChangeQuantity, handleQuantity }) => {
   return (
     <div className="flex items-center gap-2">
@@ -25,4 +25,4 @@ const SelectQuantity = ({ quantity, handleChangeQuantity, handleQuantity }) => {
   );
 };
 
-export default memo(SelectQuantity);
+export default withBase(SelectQuantity);

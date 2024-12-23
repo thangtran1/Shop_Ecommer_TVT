@@ -16,11 +16,12 @@ import {
 import { Checkout } from "./pages/member";
 import path from "./ultils/path";
 import { apiGetCategories } from "./store/app/asyncActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Modal } from "./components";
 import Cart from "./components/Publics/Cart";
+import withBase from "hocs/withBase";
 import {
   AdminLayout,
   ManageProduct,
@@ -30,8 +31,7 @@ import {
   Dashboard,
 } from "./pages/admin";
 import { MemberLayout, Personal, Wishlish, History } from "./pages/member";
-function App() {
-  const dispatch = useDispatch();
+function App({ dispatch }) {
   const { isShowModal, modalChildren, isShowCart } = useSelector(
     (state) => state.app
   );
@@ -57,7 +57,7 @@ function App() {
           <Route path={path.BLOGS} element={<Blogs />}></Route>
           <Route path={path.OUR_SERVICES} element={<Service />}></Route>
           <Route path={path.FAQ} element={<FAQ />}></Route>
-          <Route path={path.PRODUCTS} element={<Products />}></Route>
+          <Route path={path.PRODUCTS__CATEGORY} element={<Products />}></Route>
           <Route path={path.RESET_PASSWORD} element={<ResetPassword />}></Route>
           <Route path={path.ALL} element={<Home />}></Route>
         </Route>
@@ -101,4 +101,4 @@ function App() {
   );
 }
 
-export default App;
+export default withBase(App);

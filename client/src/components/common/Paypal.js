@@ -7,9 +7,7 @@ import { useEffect } from "react";
 import { apiCreateOrder } from "../../apis/product";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-// This value is from the props in the UI
 const style = { layout: "vertical" };
-// Custom component to wrap the PayPalButtons and show loading spinner
 const ButtonWrapper = ({
   currency,
   showSpinner,
@@ -28,7 +26,6 @@ const ButtonWrapper = ({
       },
     });
   }, [currency, showSpinner]);
-
   const handleCreateOrder = async (payload, address) => {
     const response = await apiCreateOrder({
       ...payload,

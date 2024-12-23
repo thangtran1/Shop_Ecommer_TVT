@@ -12,7 +12,6 @@ import { useDebounce } from "hooks";
 import { toast } from "react-toastify";
 const { FaChevronDown } = icons;
 
-// Hàm helper để lấy queries từ params
 const getQueriesFromParams = (params) => {
   const queries = {};
   for (let i of params.entries()) {
@@ -20,7 +19,6 @@ const getQueriesFromParams = (params) => {
   }
   return queries;
 };
-
 const SearchItem = ({
   name,
   activeClick,
@@ -37,7 +35,6 @@ const SearchItem = ({
   const debouncePriceFrom = useDebounce(fromPrice.from, 500);
   const debouncePriceTo = useDebounce(fromPrice.to, 500);
 
-  // Xử lý color filter
   useEffect(() => {
     const queries = getQueriesFromParams(params);
     if (selected.length > 0) {
@@ -53,7 +50,6 @@ const SearchItem = ({
     });
   }, [selected]);
 
-  // Xử lý price filter
   useEffect(() => {
     if (
       debouncePriceFrom ||
@@ -61,7 +57,6 @@ const SearchItem = ({
       (fromPrice.from === "" && fromPrice.to === "")
     ) {
       const queries = getQueriesFromParams(params);
-      // Lọc bỏ các params price cũ
       Object.keys(queries).forEach((key) => {
         if (["from", "to", "price", "gte", "lte"].includes(key)) {
           delete queries[key];
@@ -79,7 +74,6 @@ const SearchItem = ({
     }
   }, [debouncePriceFrom, debouncePriceTo, fromPrice]);
 
-  // Fetch max price
   useEffect(() => {
     if (type === "input") {
       apiGetProducts({ sort: "-price", limit: 1 }).then((response) => {
@@ -88,29 +82,24 @@ const SearchItem = ({
     }
   }, [type]);
 
-  // Validate price
   useEffect(() => {
     let updatedFromPrice = { ...fromPrice };
 
-    // Kiểm tra 'from' lớn hơn 'to'
     if (fromPrice.from > fromPrice.to && fromPrice.to) {
       toast.error("'From' không được lớn hơn 'To'!");
       updatedFromPrice.from = fromPrice.to;
     }
 
-    // Kiểm tra 'from' lớn hơn maxPrice
     if (fromPrice.from > maxPrice) {
       toast.error("Giá trị 'from' không được vượt quá giá trị tối đa!");
       updatedFromPrice.from = maxPrice;
     }
 
-    // Kiểm tra 'to' lớn hơn maxPrice
     if (fromPrice.to > maxPrice) {
       toast.error("Giá trị 'to' không được vượt quá giá trị tối đa!");
       updatedFromPrice.to = maxPrice;
     }
 
-    // Cập nhật giá trị mới nếu cần
     if (
       updatedFromPrice.from !== fromPrice.from ||
       updatedFromPrice.to !== fromPrice.to

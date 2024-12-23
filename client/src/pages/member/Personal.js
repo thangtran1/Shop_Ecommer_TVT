@@ -4,11 +4,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { InputForm } from "components";
 import moment from "moment";
 import { getCurrent } from "../../store/user.js/asyncAction";
-import Buttons from "components/Buttons";
 import avatar from "assets/avatar_default.jpg";
 import { toast } from "react-toastify";
 import { apiUpdateCurrent } from "apis/user";
-const Personal = () => {
+import { useSearchParams } from "react-router-dom";
+import withBase from "hocs/withBase";
+const Personal = ({ navigate }) => {
   const {
     register,
     formState: { errors, isDirty },
@@ -18,6 +19,9 @@ const Personal = () => {
   const { current } = useSelector((state) => state.user);
   const { updateUser } = useDispatch();
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get("redirect");
+  console.log(current);
   useEffect(() => {
     reset({
       firstname: current?.firstname,
@@ -25,10 +29,10 @@ const Personal = () => {
       phone: current?.phone,
       email: current?.email,
       avatar: current?.avatar,
+      address: current?.address,
     });
   }, [current]);
   const handleUpdateUser = async (data) => {
-    console.log(data);
     const formData = new FormData();
     if (data.avatar.length > 0) formData.append("avatar", data.avatar[0]);
     delete formData.avatar;
@@ -39,12 +43,14 @@ const Personal = () => {
     if (response.success) {
       dispatch(getCurrent());
       toast.success(response.message || "Updated user successfully");
+      if (redirect) {
+        navigate(redirect);
+      }
     } else {
       toast.error(response.message || "Updated user failed");
     }
   };
 
-  console.log(isDirty);
   return (
     <div className="w-full relative px-4 ">
       <header className="py-4 border-b border-gray-600 text-3xl font-bold">
@@ -95,6 +101,13 @@ const Personal = () => {
             },
           }}
         />
+        <InputForm
+          label="Address"
+          register={register}
+          errors={errors}
+          id="address"
+          validate={{ required: "Address is required" }}
+        />
         <div className="flex items-center gap-2">
           <span className="font-medium">Account Status:</span>
           <span className="font-semibold">
@@ -136,4 +149,4 @@ const Personal = () => {
   );
 };
 
-export default Personal;
+export default withBase(Personal);

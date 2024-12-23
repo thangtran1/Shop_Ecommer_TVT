@@ -21,5 +21,4 @@ const Votebar = ({ number, ratingsCount, ratingTotal }) => {
     </div>
   );
 };
-
 export default memo(Votebar);

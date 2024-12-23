@@ -3,8 +3,9 @@ import { apiGetProducts } from "apis/product";
 import { CustomSlider } from "..";
 import banner1 from "assets/banner1.png";
 import banner2 from "assets/banner2.png";
+import withBase from "hocs/withBase";
 import { apiGetNewProducts } from "store/products/asyncActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 const tabs = [
   {
     id: 1,
@@ -15,13 +16,11 @@ const tabs = [
     name: "new arrivals",
   },
 ];
-const BestSeller = () => {
+const BestSeller = ({ dispatch }) => {
   const [bestSellers, setbestSellers] = useState(null);
   const [activedTab, setActivedTab] = useState(1);
   const [products, setProducts] = useState(null);
-  const dispatch = useDispatch();
   const { newProducts } = useSelector((state) => state.product);
-
   const fetchProducts = async () => {
     const response = await apiGetProducts({ sort: "-sold" });
     if (response?.success) {
@@ -29,7 +28,6 @@ const BestSeller = () => {
       setProducts(response.products);
     }
   };
-
   useEffect(() => {
     fetchProducts();
     dispatch(apiGetNewProducts());
@@ -73,4 +71,4 @@ const BestSeller = () => {
   );
 };
 
-export default BestSeller;
+export default withBase(BestSeller);

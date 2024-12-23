@@ -3,17 +3,13 @@ import logo from "assets/logo_digital.png";
 import icons from "ultils/icons";
 import { Link } from "react-router-dom";
 import path from "ultils/path";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
 import { logout } from "store/user.js/userSlice";
 import Swal from "sweetalert2";
 import withBase from "hocs/withBase";
 import { showCart } from "store/app/appReducer";
-const Header = (props) => {
+const Header = ({ current, dispatch }) => {
   const { MdLocalPhone, MdOutlineMail, IoBagHandleOutline, FaUser } = icons;
-  const { current } = useSelector((state) => state.user);
   const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useDispatch();
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (isOpen && !event.target.closest("#dropdown")) {
@@ -35,7 +31,7 @@ const Header = (props) => {
       cancelButtonText: "Không",
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(logout()); // Thực hiện đăng xuất
+        dispatch(logout());
       }
     });
   };
@@ -96,7 +92,7 @@ const Header = (props) => {
                     </Link>
                   )}
                   <span
-                    onClick={handleLogout} // Gọi hàm handleLogout khi nhấp vào Logout
+                    onClick={handleLogout}
                     className="p-2 w-full hover:bg-gray-200"
                   >
                     Logout

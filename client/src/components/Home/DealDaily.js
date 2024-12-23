@@ -3,7 +3,6 @@ import icons from "ultils/icons";
 import { apiGetProducts } from "apis/product";
 import { formatMoney, renderStarFromNumber } from "ultils/helper";
 import CountDown from "../CountDown";
-
 const { MdOutlineStar, IoMdMenu } = icons;
 let interval;
 const DealDaily = () => {
@@ -36,13 +35,11 @@ const DealDaily = () => {
 
   const fetchDealDaily = async () => {
     const response = await apiGetProducts({
-      limit: 1,
-      page: Math.round(Math.random() * 10),
-      totalRatings: 5,
+      sort: "-totalRatings",
+      limit: 20,
     });
     if (response.success) {
-      setDealDaily(response.products[0]);
-      // Lưu sản phẩm và thời gian vào localStorage
+      setDealDaily(response.products[Math.floor(Math.random() * 20)]);
       localStorage.setItem(
         "dealDaily",
         JSON.stringify({
@@ -59,20 +56,14 @@ const DealDaily = () => {
       setExpiredTime(false);
     }
   };
-
   useEffect(() => {
-    // Kiểm tra xem có deal đã lưu không
     const savedDeal = localStorage.getItem("dealDaily");
     if (savedDeal) {
       const { product, timestamp } = JSON.parse(savedDeal);
       const currentTime = new Date().getTime();
-      const timePassed = Math.floor((currentTime - timestamp) / 1000); // Số giây đã trôi qua
-
-      // Nếu chưa hết hạn, load lại deal cũ
+      const timePassed = Math.floor((currentTime - timestamp) / 1000);
       if (timePassed < 24 * 60 * 60) {
-        // 24 giờ tính bằng giây
         setDealDaily(product);
-        // Tính toán thời gian còn lại
         const remainingSeconds = 24 * 60 * 60 - timePassed;
         const h = Math.floor(remainingSeconds / 3600);
         const m = Math.floor((remainingSeconds % 3600) / 60);
@@ -81,7 +72,6 @@ const DealDaily = () => {
         setMinutes(m);
         setSeconds(s);
       } else {
-        // Nếu đã hết hạn, fetch deal mới
         fetchDealDaily();
       }
     } else {
@@ -104,10 +94,8 @@ const DealDaily = () => {
         } else {
           setExpiredTime(true);
           clearInterval(interval);
-          // Gọi fetchDealDaily khi hết thời gian
           fetchDealDaily();
         }
-        // Cập nhật localStorage mỗi giây
         const savedDeal = localStorage.getItem("dealDaily");
         if (savedDeal) {
           const dealData = JSON.parse(savedDeal);
@@ -123,7 +111,6 @@ const DealDaily = () => {
         }
       }, 1000);
     }
-
     return () => clearInterval(interval);
   }, [seconds, minutes, hours, expiredTime]);
   return (

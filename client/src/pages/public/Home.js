@@ -9,12 +9,17 @@ import {
 } from "components";
 import { useSelector } from "react-redux";
 import icons from "ultils/icons";
-
+import withBase from "hocs/withBase";
+import { createSearchParams } from "react-router-dom";
 const { IoIosArrowForward } = icons;
-const Home = () => {
+const Home = ({ navigate }) => {
   const { newProducts } = useSelector((state) => state.product);
   const { categories } = useSelector((state) => state.app);
+  const { current } = useSelector((state) => state.user);
+  console.log(current, "current");
   // const { isLoggedIn, current } = useSelector((state) => state.user);
+  console.log(categories, "categories");
+
   return (
     <>
       <div className="w-main flex mt-6">
@@ -59,8 +64,16 @@ const Home = () => {
                     <ul className="text-sm">
                       {el?.brand?.map((item) => (
                         <span
+                          onClick={() =>
+                            navigate({
+                              pathname: `/${el.title}`,
+                              search: createSearchParams({
+                                brand: item,
+                              }).toString(),
+                            })
+                          }
                           key={item}
-                          className="flex gap-1 items-center text-gray-500 hover:text-main cursor-pointer"
+                          className="flex gap-1 hover:text-main hover:underline cursor-pointer items-center text-gray-500"
                         >
                           <IoIosArrowForward size={14} />
                           <li> {item}</li>
@@ -82,4 +95,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default withBase(Home);

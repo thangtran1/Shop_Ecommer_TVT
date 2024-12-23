@@ -9,19 +9,14 @@ import { apiRemoveCart } from "apis/user";
 import { getCurrent } from "store/user.js/asyncAction";
 import { toast } from "react-toastify";
 import path from "ultils/path";
-import { useNavigate } from "react-router-dom";
 import { showCart } from "store/app/appReducer";
-const Cart = (props) => {
-  const navigate = useNavigate();
+const Cart = ({ dispatch, navigate }) => {
   const { currentCart } = useSelector((state) => state.user);
-  console.log("12313123123", currentCart);
-
   const deleteCart = async (pid, color) => {
-    console.log("pid", pid);
     const response = await apiRemoveCart(pid, color);
     if (response.success) {
       toast.success(response.message);
-      props.dispatch(getCurrent());
+      dispatch(getCurrent());
     } else {
       toast.error(response.message);
     }
@@ -36,7 +31,7 @@ const Cart = (props) => {
     >
       <header className="row-span-1 h-full border-b border-gray-300 flex justify-between  items-center font-bold text-2xl">
         <span className="bg-none">Your Cart</span>
-        <span onClick={() => props.dispatch(showCart())}>
+        <span onClick={() => dispatch(showCart())}>
           <IoClose className="cursor-pointer p-2" size={34} />
         </span>
       </header>
@@ -97,7 +92,7 @@ const Cart = (props) => {
           fw
           className="w-full py-3"
           handleOnclick={() => {
-            props.dispatch(showCart({ isShowCart: false }));
+            dispatch(showCart({ isShowCart: false }));
             navigate(`/${path.MEMBER}/${path.DETAIL_CART}`);
           }}
         >
@@ -107,5 +102,4 @@ const Cart = (props) => {
     </div>
   );
 };
-
 export default withBase(Cart);

@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-
 const InputSelectFilter = ({ value, changeValue, options }) => {
   return (
     <select
@@ -16,5 +15,4 @@ const InputSelectFilter = ({ value, changeValue, options }) => {
     </select>
   );
 };
-
 export default memo(InputSelectFilter);

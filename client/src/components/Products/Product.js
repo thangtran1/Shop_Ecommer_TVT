@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { formatMoney } from "ultils/helper";
 import label from "assets/label.webp";
-// import label2 from "../assets/label2.png";
 import { renderStarFromNumber } from "ultils/helper";
 import { SelectOptions } from "..";
 import icons from "ultils/icons";
@@ -9,28 +8,35 @@ import { Link } from "react-router-dom";
 import withBase from "hocs/withBase";
 import QuickView from "components/Products/QuickView";
 import { showModal } from "store/app/appReducer";
-import { apiUpdateCart } from "apis/user";
+import { apiUpdateCart, apiUpdateWishlist } from "apis/user";
 import { toast } from "react-toastify";
 import { getCurrent } from "store/user.js/asyncAction";
-import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import path from "ultils/path";
+import clsx from "clsx";
 import { createSearchParams } from "react-router-dom";
-const { FaEye, IoMdMenu, IoMdHeart, BsCart4, FaCartArrowDown } = icons;
+const { FaEye, IoMdHeart, BsCart4, FaCartArrowDown } = icons;
 const Product = ({
   productData,
   isNew,
   normal,
   navigate,
   dispatch,
-  location,
+  className,
+  current,
 }) => {
   const [isShowOption, setIsShowOption] = useState(false);
-  const { current } = useSelector((state) => state.user);
   const handlerClickOption = async (e, type) => {
     e.stopPropagation();
     e.preventDefault();
     if (type === "HEART") {
+      const response = await apiUpdateWishlist(productData?._id);
+      if (response.success) {
+        dispatch(getCurrent());
+        toast.success(response.message || "Add to wishlist successfully");
+      } else {
+        toast.error(response.message || "Add to wishlist failed");
+      }
     }
     if (type === "CART") {
       if (!current)
@@ -66,7 +72,6 @@ const Product = ({
       } else {
         toast.error(response.message || "Add to cart failed");
       }
-      console.log(response, "response111111");
     }
     if (type === "EYE") {
       dispatch(
@@ -78,7 +83,7 @@ const Product = ({
     }
   };
   return (
-    <div className="w-full text-base  px-[10px]">
+    <div className={clsx("w-full text-base  px-[10px]", className)}>
       <Link
         to={`/${productData?.category?.toLowerCase()}/${productData?._id}/${
           productData?.title
@@ -100,7 +105,19 @@ const Product = ({
                 title="Add to wishlist"
                 onClick={(e) => handlerClickOption(e, "HEART")}
               >
-                <SelectOptions icon={<IoMdHeart />} />
+                <SelectOptions
+                  icon={
+                    <IoMdHeart
+                      color={
+                        current?.wishlist?.some(
+                          (el) => el._id.toString() === productData?._id
+                        )
+                          ? "red"
+                          : "gray"
+                      }
+                    />
+                  }
+                />
               </span>
               {current?.cart?.some(
                 (el) => el.product === productData?._id.toString()
@@ -127,7 +144,6 @@ const Product = ({
                   <SelectOptions icon={<BsCart4 color="red" />} />
                 </span>
               )}
-
               <span
                 title="Quick view"
                 onClick={(e) => handlerClickOption(e, "EYE")}

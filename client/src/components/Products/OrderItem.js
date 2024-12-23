@@ -13,13 +13,11 @@ const OrderItem = ({ item, defaultQuantity = 1, dispatch }) => {
       return flag === "increase" ? prev + 1 : Math.max(1, prev - 1);
     });
   }, []);
-
   useEffect(() => {
     dispatch(
       updateCart({ _id: item.product._id, quantity, color: item.color })
     );
   }, [quantity]);
-
   return (
     <div className="w-main mx-auto border py-3 font-semibold grid grid-cols-10">
       <div className="flex gap-2 col-span-6 items-center">
@@ -33,21 +31,17 @@ const OrderItem = ({ item, defaultQuantity = 1, dispatch }) => {
           <span className="text-sm">{item?.color}</span>
         </div>
       </div>
-
       <div className="col-span-1 flex justify-center items-center">
         <SelectQuantity
-          quantity={quantity} // Sử dụng quantity từ state
+          quantity={quantity}
           handleChangeQuantity={(flag) => handleChangeQuantity(item._id, flag)}
           handleQuantity={(value) => handleQuantity(item._id, value)}
         />
       </div>
-
-      {/* Product Price */}
       <div className="col-span-2 text-center">
         {formatMoney(item?.product?.price * quantity)}
       </div>
     </div>
   );
 };
-
 export default withBase(OrderItem);

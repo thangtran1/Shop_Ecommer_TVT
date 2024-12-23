@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-
 const CountDown = ({ unit, number }) => {
   return (
     <div className="w-[30%] h-[60px]  flex items-center justify-center bg-[#F4F4F4] rounded-md  flex-col ">
@@ -8,5 +7,4 @@ const CountDown = ({ unit, number }) => {
     </div>
   );
 };
-
 export default memo(CountDown);

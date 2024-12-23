@@ -89,5 +89,4 @@ const AdminSidebar = () => {
     </div>
   );
 };
-
 export default memo(AdminSidebar);

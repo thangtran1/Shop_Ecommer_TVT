@@ -1,5 +1,4 @@
 import React from "react";
-
 const Buttons = ({ children, fw, handleOnclick, style, type = "button" }) => {
   return (
     <button
@@ -19,5 +18,4 @@ const Buttons = ({ children, fw, handleOnclick, style, type = "button" }) => {
     </button>
   );
 };
-
 export default Buttons;

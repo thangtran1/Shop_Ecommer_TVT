@@ -1,7 +1,6 @@
 import React from "react";
 import Slider from "react-slick";
 import { Product } from ".";
-
 const settings = {
   dots: false,
   infinite: false,
@@ -11,24 +10,21 @@ const settings = {
 };
 const CustomSlider = ({ products, activedTab, normal }) => {
   return (
-    <>
-      <div>
-        {products && (
-          <Slider className="custom-slider" {...settings}>
-            {products?.map((el) => (
-              <Product
-                key={el._id}
-                pid={el.id}
-                productData={el}
-                isNew={activedTab === 1 ? false : true}
-                normal={normal} // an hien label trending or new
-              />
-            ))}
-          </Slider>
-        )}
-      </div>
-    </>
+    <div>
+      {products && (
+        <Slider className="custom-slider" {...settings}>
+          {products?.map((el) => (
+            <Product
+              key={el._id}
+              pid={el.id}
+              productData={el}
+              isNew={activedTab === 1 ? false : true}
+              normal={normal}
+            />
+          ))}
+        </Slider>
+      )}
+    </div>
   );
 };
-
 export default CustomSlider;

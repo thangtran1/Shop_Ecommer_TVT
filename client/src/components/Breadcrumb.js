@@ -2,7 +2,6 @@ import React from "react";
 import useBreadcrumbs from "use-react-router-breadcrumbs";
 import { Link } from "react-router-dom";
 import icons from "ultils/icons";
-
 const { IoIosArrowForward } = icons;
 const Breadcrumb = ({ title, category }) => {
   const routes = [
@@ -11,7 +10,6 @@ const Breadcrumb = ({ title, category }) => {
     { path: "/:category/:pid/:title", breadcrumb: title },
   ];
   const breadcrumbs = useBreadcrumbs(routes);
-
   return (
     <div className="text-sm flex items-center gap-4">
       {breadcrumbs
@@ -35,5 +33,4 @@ const Breadcrumb = ({ title, category }) => {
     </div>
   );
 };
-
 export default Breadcrumb;

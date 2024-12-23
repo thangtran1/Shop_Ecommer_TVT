@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useNavigate, createSearchParams } from "react-router-dom";
 import { apiGetProductDetail, apiGetProducts } from "apis/product";
 import {
@@ -34,6 +34,7 @@ const DetailProduct = ({ location, navigate, dispatch }) => {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [update, setUpdate] = useState(false);
+  const titleRef = useRef(null);
 
   console.log("product", product);
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -57,6 +58,9 @@ const DetailProduct = ({ location, navigate, dispatch }) => {
   useEffect(() => {
     if (pid) fetchProductDetail();
     if (product?.category) fetchRelatedProducts();
+    if (titleRef?.current) {
+      titleRef?.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [pid, fetchProductDetail, product?.category, fetchRelatedProducts]);
 
   const handleQuantity = useCallback((number) => {
@@ -122,7 +126,7 @@ const DetailProduct = ({ location, navigate, dispatch }) => {
   };
   return (
     product && (
-      <div className="w-full ">
+      <div ref={titleRef} className="w-full  ">
         <div className="h-[81px] flex items-center justify-center bg-gray-100">
           <div className="w-main">
             <h3>{title}</h3>

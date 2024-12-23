@@ -5,7 +5,6 @@ import { renderStarFromNumber } from "ultils/helper";
 const CommentDetail = ({
   image = avatar,
   name = "lacdy",
-  content,
   createdAt,
   comment,
   star,
@@ -40,7 +39,6 @@ const CommentDetail = ({
             <span className="font-semibold">Đánh giá:</span>
             <span className="flex items-center gap-1">{comment}</span>
           </span>
-          {/* Phần hiển thị ảnh */}
           {images?.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
               {images?.map((el, index) => (
@@ -49,7 +47,7 @@ const CommentDetail = ({
                     src={el}
                     alt={`comment-image-${index + 1}`}
                     className="w-20 h-20 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
-                    onClick={() => window.open(el, "_blank")} // Click để xem ảnh gốc
+                    onClick={() => window.open(el, "_blank")}
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 rounded-lg" />
                 </div>
@@ -61,5 +59,4 @@ const CommentDetail = ({
     </div>
   );
 };
-
 export default CommentDetail;

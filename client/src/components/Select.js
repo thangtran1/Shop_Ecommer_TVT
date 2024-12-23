@@ -1,5 +1,5 @@
-import React, { memo } from "react";
-
+import React from "react";
+import withBase from "hocs/withBase";
 const Select = ({
   label,
   options,
@@ -32,4 +32,4 @@ const Select = ({
   );
 };
 
-export default memo(Select);
+export default withBase(Select);

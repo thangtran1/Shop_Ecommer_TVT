@@ -1,33 +1,31 @@
-import React, { memo, useState } from "react";
+import React, { useState } from "react";
 import { tabs } from "ultils/constants";
 import { Votebar, Buttons, VoteOptions, CommentDetail } from "../index";
 import { renderStarFromNumber } from "ultils/helper";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { showModal } from "store/app/appReducer";
 import { apiRatings } from "apis";
 import Swal from "sweetalert2";
 import path from "ultils/path";
-import { useNavigate } from "react-router-dom";
+import withBase from "hocs/withBase";
 const DetailInformation = ({
   totalRatings,
-  totalCount,
   nameProduct,
   pid,
   ratings,
   reRender,
   images,
+  dispatch,
+  navigate,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(1);
-  const dispatch = useDispatch();
   const { token } = useSelector((state) => state.user);
-  const navigate = useNavigate();
   const handleSubmitVoteOptions = async (formData) => {
     if (!formData.get("star") || !formData.get("comment") || !pid) {
       alert("Please fill all fields");
       return;
     }
-
     try {
       setIsLoading(true);
       const response = await apiRatings(formData);
@@ -42,7 +40,6 @@ const DetailInformation = ({
           pauseOnHover: true,
           draggable: true,
         });
-
         reRender();
         dispatch(
           showModal({
@@ -62,7 +59,6 @@ const DetailInformation = ({
       setIsLoading(false);
     }
   };
-
   const handleVoteNow = () => {
     if (!token) {
       Swal.fire({
@@ -122,7 +118,6 @@ const DetailInformation = ({
           }}
         />
       </div>
-
       <div className="flex flex-col py-8  w-main">
         <span className="p-2 px-4 text-sm font-medium cursor-pointer transition-all border border-gray-200 border-b-2 hover:bg-gray-100  hover:text-gray-800">
           CUSTOMER REVIEW
@@ -182,4 +177,4 @@ const DetailInformation = ({
   );
 };
 
-export default memo(DetailInformation);
+export default withBase(DetailInformation);

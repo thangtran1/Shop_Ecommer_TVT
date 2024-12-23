@@ -1,21 +1,20 @@
-import React, { memo, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import path from "ultils/path";
 import icons from "ultils/icons";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { getCurrent } from "store/user.js/asyncAction";
 import { logout, clearMessage } from "store/user.js/userSlice";
 import Swal from "sweetalert2";
-const TopHeader = () => {
+import withBase from "hocs/withBase";
+const TopHeader = ({ dispatch, navigate, current }) => {
   const { LuLogOut } = icons;
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const handleLogout = () => {
     dispatch(logout());
     dispatch(clearMessage());
     navigate(`/${path.LOGIN}`);
   };
-  const { current, message } = useSelector((state) => state.user);
+  const { message } = useSelector((state) => state.user);
   useEffect(() => {
     let localStorageData = window.localStorage.getItem("persist:shop/users");
     if (localStorageData) {
@@ -58,5 +57,4 @@ const TopHeader = () => {
     </div>
   );
 };
-
-export default memo(TopHeader);
+export default withBase(TopHeader);

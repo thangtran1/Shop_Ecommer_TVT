@@ -1,7 +1,6 @@
-import React, { memo } from "react";
-
+import React from "react";
+import withBase from "hocs/withBase";
 const Varrients = () => {
   return <div>Varrients</div>;
 };
-
-export default memo(Varrients);
+export default withBase(Varrients);

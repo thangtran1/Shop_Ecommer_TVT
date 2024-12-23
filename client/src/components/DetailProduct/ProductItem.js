@@ -1,5 +1,5 @@
-import React, { memo } from "react";
-
+import React from "react";
+import withBase from "hocs/withBase";
 const ProductItem = ({ title, sub, icon }) => {
   return (
     <div className="flex items-center gap-4 p-3 border mb-[10px]">
@@ -14,4 +14,4 @@ const ProductItem = ({ title, sub, icon }) => {
   );
 };
 
-export default memo(ProductItem);
+export default withBase(ProductItem);

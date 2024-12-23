@@ -11,5 +11,4 @@ const Loading = () => {
     />
   );
 };
-
 export default memo(Loading);

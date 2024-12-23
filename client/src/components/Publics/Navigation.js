@@ -1,7 +1,6 @@
-import React from "react";
+import React, { memo } from "react";
 import { navigation } from "ultils/constants";
 import { NavLink } from "react-router-dom";
-
 const Navigation = () => {
   return (
     <div className="border-y w-main h-[48px] py-2 text-sm flex items-center">
@@ -22,5 +21,4 @@ const Navigation = () => {
     </div>
   );
 };
-
-export default Navigation;
+export default memo(Navigation);

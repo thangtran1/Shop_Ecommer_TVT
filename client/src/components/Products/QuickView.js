@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { formatPrice, renderStarFromNumber } from "ultils/helper";
 import ReactImageMagnify from "react-image-magnify";
 import Slider from "react-slick";
 import SelectQuantity from "components/DetailProduct/SelectQuantity";
 import Buttons from "components/Buttons";
-
 const settings = {
   dots: false,
   infinite: false,
@@ -15,7 +14,6 @@ const settings = {
 const QuickView = ({ productData }) => {
   const [currentImage, setCurrentImage] = useState(productData?.thumb);
   const [quantity, setQuantity] = useState(1);
-
   const handleChangeQuantity = (flag) => {
     if (flag === "increase" && quantity < productData?.quantity) {
       setQuantity(quantity + 1);
@@ -44,8 +42,6 @@ const QuickView = ({ productData }) => {
               }}
             />
           </div>
-
-          {/* Slider hình ảnh bên dưới */}
           <div className="w-[458px]">
             <Slider
               className="image flex flex-2 justify-between -mx-2"
@@ -67,7 +63,6 @@ const QuickView = ({ productData }) => {
             </Slider>
           </div>
         </div>
-
         <div className="border-purple-950 border w-full flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <h2 className="text-[30px] font-semibold">{`${formatPrice(
@@ -106,4 +101,4 @@ const QuickView = ({ productData }) => {
   );
 };
 
-export default QuickView;
+export default memo(QuickView);

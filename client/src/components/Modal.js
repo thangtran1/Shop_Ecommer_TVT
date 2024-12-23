@@ -1,10 +1,7 @@
-import React, { memo } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
 import { showModal } from "store/app/appReducer";
-
-const Modal = ({ children }) => {
-  const dispatch = useDispatch();
-
+import withBase from "hocs/withBase";
+const Modal = ({ children, dispatch }) => {
   return (
     <div
       className="bg-overlay"
@@ -19,4 +16,4 @@ const Modal = ({ children }) => {
   );
 };
 
-export default memo(Modal);
+export default withBase(Modal);

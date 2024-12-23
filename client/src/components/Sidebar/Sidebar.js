@@ -1,9 +1,8 @@
-import React, { memo } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { createSlug } from "ultils/helper";
-import { useSelector } from "react-redux";
-const Sidebar = () => {
-  const { categories } = useSelector((state) => state.app);
+import withBase from "hocs/withBase";
+const Sidebar = ({ categories }) => {
   return (
     <div className="flex border flex-col">
       {categories?.map((el) => (
@@ -23,4 +22,4 @@ const Sidebar = () => {
   );
 };
 
-export default memo(Sidebar);
+export default withBase(Sidebar);

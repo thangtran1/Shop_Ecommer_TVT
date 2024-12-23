@@ -72,8 +72,6 @@ input {
   -moz-appearance: none;
   appearance: none;
 }
-/* Phan san pham */
-
 .my-masonry-grid {
   display: flex;
   width: 100%;
@@ -94,13 +92,13 @@ input {
 
 @media (max-width: 800px) {
   .my-masonry-grid {
-    margin-left: -15px; /* gutter size offset */
+    margin-left: -15px;
   }
   .my-masonry-grid_column {
-    padding-left: 15px; /* gutter size offset */
+    padding-left: 15px;
   }
   .my-masonry-grid_column > div {
-    margin-bottom: 15px; /* space between items */
+    margin-bottom: 15px;
   }
 }
 
@@ -108,7 +106,6 @@ input {
   width: 500px;
 }
 
-/* Manage user */
 .search-input {
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -129,8 +126,6 @@ input {
   background-color: #40a9ff;
   transform: translateY(-2px);
 }
-
-/* Pagination */
 
 code {
   white-space: initial;

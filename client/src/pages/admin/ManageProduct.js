@@ -35,13 +35,11 @@ const ManageProduct = () => {
   const [formErrors, setFormErrors] = useState({});
   const [customizeVarrient, setCustomizeVarrient] = useState(false);
   const fetchProducts = async (params = {}) => {
-    console.log("Fetching products with params:", params);
     const response = await apiGetProducts({
       ...params,
       page: currentPage,
       limit: 5,
     });
-    console.log("API response:", response);
     if (response.success) {
       setProducts(response.products);
       setTotalCounts(response.counts);
