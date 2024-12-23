@@ -1,7 +1,5 @@
-const { response } = require("express");
 const BlogCategory = require("../models/blogCategory");
 const asyncHandler = require("express-async-handler");
-const slugify = require("slugify");
 
 const createBlogCategory = asyncHandler(async (req, res) => {
   const response = await BlogCategory.create(req.body);

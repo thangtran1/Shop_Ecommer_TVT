@@ -1,9 +1,7 @@
-const { response } = require("express");
 const Order = require("../models/order");
 const User = require("../models/user");
 const Coupon = require("../models/coupon");
 const asyncHandler = require("express-async-handler");
-const slugify = require("slugify");
 
 const createOrder = asyncHandler(async (req, res) => {
   const { _id } = req.user;
@@ -37,20 +35,90 @@ const updateStatus = asyncHandler(async (req, res) => {
 });
 
 const getUserOrder = asyncHandler(async (req, res) => {
-  const { _id } = req.user;
-  const response = await Order.find({ orderBy: _id });
-  return res.status(200).json({
-    success: response ? true : false,
-    result: response ? response : "Something went wrong",
-  });
+  let queries = { ...req.query };
+  const excludeFields = ["limit", "sort", "page", "fields", "isMine"];
+  excludeFields.forEach((el) => delete queries[el]);
+
+  let queryString = JSON.stringify(queries);
+  queryString = queryString.replace(
+    /\b(gte|gt|lt|lte)\b/g,
+    (matchedEl) => `$${matchedEl}`
+  );
+  const formatedQueries = JSON.parse(queryString);
+
+  if (queries?.title) {
+    formatedQueries.title = { $regex: queries.title, $options: "i" };
+  }
+  if (queries?.category) {
+    formatedQueries.category = { $regex: queries.category, $options: "i" };
+  }
+  let queryCommand = Order.find(formatedQueries);
+
+  const page = +req.query.page || 1;
+  const limit = +req.query.limit || 10;
+  const skip = (page - 1) * limit;
+  queryCommand = queryCommand.skip(skip).limit(limit);
+
+  try {
+    const orders = await queryCommand.exec();
+    const counts = await Order.countDocuments(formatedQueries);
+
+    return res.status(200).json({
+      success: true,
+      counts,
+      orders,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 });
 
 const getOrders = asyncHandler(async (req, res) => {
-  const response = await Order.find();
-  return res.status(200).json({
-    success: response ? true : false,
-    result: response ? response : "Something went wrong",
-  });
+  let queries = { ...req.query };
+
+  const excludeFields = ["limit", "sort", "page", "fields"];
+  excludeFields.forEach((el) => delete queries[el]);
+
+  let queryString = JSON.stringify(queries);
+  queryString = queryString.replace(
+    /\b(gte|gt|lt|lte)\b/g,
+    (matchedEl) => `$${matchedEl}`
+  );
+  const formatedQueries = JSON.parse(queryString);
+
+  if (queries?.title)
+    formatedQueries.title = { $regex: queries.title, $options: "i" };
+  if (queries?.category)
+    formatedQueries.category = { $regex: queries.category, $options: "i" };
+  let queryCommand = Order.find(formatedQueries);
+
+  // Sorting theo giá
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(",").join(" ");
+    queryCommand = queryCommand.sort(sortBy);
+  }
+
+  // Pagination
+  const page = +req.query.page || 1;
+  const limit = +req.query.limit || process.env.LIMIT_PRODUCTS;
+  const skip = (page - 1) * limit;
+  queryCommand.skip(skip).limit(limit);
+
+  // Execute query
+  try {
+    const response = await queryCommand.exec();
+    const counts = await Order.find(formatedQueries).countDocuments();
+    return res.status(200).json({
+      success: response ? true : false,
+      counts,
+      orders: response ? response : "Cannot get orders",
+    });
+  } catch (err) {
+    throw new Error(err.message);
+  }
 });
 module.exports = {
   createOrder,

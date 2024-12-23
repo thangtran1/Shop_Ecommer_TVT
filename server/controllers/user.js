@@ -7,32 +7,7 @@ const {
 const crypto = require("crypto");
 const sendMail = require("../ultils/sendMail");
 const jwt = require("jsonwebtoken");
-const { response } = require("express");
 const makeToken = require("uniqid");
-const { users } = require("../ultils/constant");
-
-// const register = asyncHandler(async (req, res) => {
-//   const { email, password, firstname, lastname, phone } = req.body;
-//   if (!email || !password || !firstname || !lastname || !phone) {
-//     return res.status(400).json({
-//       success: false,
-//       msg: "Missing inputs",
-//     });
-//   }
-
-//   const user = await User.findOne({ email });
-//   if (user) {
-//     throw new Error("User already exists");
-//   } else {
-//     const newUser = await User.create(req.body);
-//     return res.status(200).json({
-//       success: newUser ? true : false,
-//       msg: newUser
-//         ? "Register is successfully. Please go login"
-//         : "Something went wrong",
-//     });
-//   }
-// });
 
 const register = asyncHandler(async (req, res) => {
   const { email, password, firstname, lastname, phone } = req.body;
@@ -128,19 +103,20 @@ const login = asyncHandler(async (req, res) => {
   }
 });
 
-// lay thong tin user
 const getCurrent = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   const user = await User.findById(_id, {
     password: 0,
     refreshToken: 0,
-  }).populate({
-    path: "cart",
-    populate: {
-      path: "product",
-      select: "title thumb price",
-    },
-  });
+  })
+    .populate({
+      path: "cart",
+      populate: {
+        path: "product",
+        select: "title thumb price",
+      },
+    })
+    .populate("wishlist", "title thumb price color");
   return res.status(200).json({
     success: user ? true : false,
     result: user ? user : "User not found",
@@ -312,8 +288,8 @@ const deleteUser = asyncHandler(async (req, res) => {
 
 const updateUser = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const { firstname, lastname, phone, email } = req.body;
-  const data = { firstname, lastname, phone, email };
+  const { firstname, lastname, phone, email, address } = req.body;
+  const data = { firstname, lastname, phone, email, address };
   if (req.file) {
     data.avatar = req.file.path;
   }
@@ -438,19 +414,13 @@ const updateCart = asyncHandler(async (req, res) => {
 });
 
 const removeCart = asyncHandler(async (req, res) => {
-  const { pid, color } = req.params; // ID sản phẩm từ tham số yêu cầu
-  const { _id } = req.user; // ID người dùng từ yêu cầu
-  console.log("User ID:", _id);
-  console.log("Product ID to remove:", pid);
-
-  // Cố gắng xóa sản phẩm khỏi giỏ hàng
+  const { pid, color } = req.params;
+  const { _id } = req.user;
   const response = await User.findByIdAndUpdate(
     _id,
     { $pull: { cart: { product: pid, color } } },
     { new: true }
   );
-
-  // Kiểm tra xem có sản phẩm nào được xóa không
   if (!response) {
     return res.status(404).json({
       success: false,
@@ -473,6 +443,36 @@ const fakeCreateUser = asyncHandler(async (req, res) => {
   });
 });
 
+const updateWishlist = asyncHandler(async (req, res) => {
+  const { pid } = req.params;
+  const { _id } = req.user;
+  const user = await User.findById(_id);
+  const alreadyProduct = user?.wishlist?.find((el) => el.toString() === pid);
+  if (alreadyProduct) {
+    const response = await User.findByIdAndUpdate(
+      _id,
+      { $pull: { wishlist: pid } },
+      { new: true }
+    );
+    return res.status(200).json({
+      success: response ? true : false,
+      message: response
+        ? "Product removed from wishlist"
+        : "Something went wrong",
+    });
+  } else {
+    const response = await User.findByIdAndUpdate(
+      _id,
+      { $push: { wishlist: pid } },
+      { new: true }
+    );
+    return res.status(200).json({
+      success: response ? true : false,
+      message: response ? "Product added to wishlist" : "Something went wrong",
+    });
+  }
+});
+
 module.exports = {
   removeCart,
   register,
@@ -490,4 +490,5 @@ module.exports = {
   updateCart,
   finalRegister,
   fakeCreateUser,
+  updateWishlist,
 };

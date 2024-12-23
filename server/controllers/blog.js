@@ -1,7 +1,5 @@
-const { response } = require("express");
 const Blog = require("../models/blog");
 const asyncHandler = require("express-async-handler");
-const slugify = require("slugify");
 
 const createNewBlog = asyncHandler(async (req, res) => {
   const { title, description, category } = req.body;
@@ -40,12 +38,9 @@ const getBlogs = asyncHandler(async (req, res) => {
   });
 });
 
-//LIKE
-//DISLIKE
 const likeBlog = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   const { bid } = req.params;
-  if (!bid) throw new Error("Missing input");
   const blog = await Blog.findById(bid);
   const alreadyDisliked = blog?.disLikes?.find((el) => el.toString() === _id);
   if (alreadyDisliked) {

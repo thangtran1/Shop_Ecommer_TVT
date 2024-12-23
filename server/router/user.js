@@ -17,6 +17,7 @@ router.delete("/:uid", [verifyAccessToken, isAdmin], ctrl.deleteUser);
 router.put("/address", [verifyAccessToken], ctrl.updateAddressUser);
 router.put("/cart", [verifyAccessToken], ctrl.updateCart);
 router.delete("/removecart/:pid/:color", [verifyAccessToken], ctrl.removeCart);
+router.put("/wishlist/:pid", [verifyAccessToken], ctrl.updateWishlist);
 
 router.put(
   "/current",

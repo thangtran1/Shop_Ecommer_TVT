@@ -1,7 +1,5 @@
-const { response } = require("express");
 const Product = require("../models/product");
 const asyncHandler = require("express-async-handler");
-// const data2 = require("../../Scape_Ecommer/data/data2.json");
 const data = require("../../Scape_Ecommer/data/ecommer.json");
 const categoryData = require("../../Scape_Ecommer/data/dataCategoryBrand");
 const ProductCategory = require("../models/productCategory");

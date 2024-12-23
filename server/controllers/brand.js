@@ -1,7 +1,5 @@
-const { response } = require("express");
 const Brand = require("../models/brand");
 const asyncHandler = require("express-async-handler");
-const slugify = require("slugify");
 
 const createNewBranch = asyncHandler(async (req, res) => {
   const response = await Brand.create(req.body);

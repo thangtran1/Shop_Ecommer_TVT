@@ -1,8 +1,7 @@
-const mongoose = require("mongoose"); // Erase if already required
+const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 
-// Declare the Schema of the Mongo model
 var userSchema = new mongoose.Schema(
   {
     firstname: {
@@ -95,5 +94,4 @@ userSchema.methods = {
   },
 };
 
-//Export the model
 module.exports = mongoose.model("User", userSchema);

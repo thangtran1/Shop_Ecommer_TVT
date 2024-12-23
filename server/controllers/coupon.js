@@ -1,7 +1,5 @@
-const { response } = require("express");
 const Coupon = require("../models/coupon");
 const asyncHandler = require("express-async-handler");
-const slugify = require("slugify");
 
 const createNewCoupon = asyncHandler(async (req, res) => {
   const { name, disCount, expiry } = req.body;

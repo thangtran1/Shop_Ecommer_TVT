@@ -1,4 +1,3 @@
-const { response } = require("express");
 const Product = require("../models/product");
 const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
@@ -34,9 +33,9 @@ const getProduct = asyncHandler(async (req, res) => {
   });
 });
 
-// Filter, sort & pagination
 const getProducts = asyncHandler(async (req, res) => {
   let queries = { ...req.query };
+  console.log(queries, "queries");
 
   const excludeFields = ["limit", "sort", "page", "fields"];
   excludeFields.forEach((el) => delete queries[el]);
@@ -59,11 +58,13 @@ const getProducts = asyncHandler(async (req, res) => {
       { category: { $regex: searchQuery, $options: "i" } },
     ];
   }
+
   if (queries?.title)
     formatedQueries.title = { $regex: queries.title, $options: "i" };
   if (queries?.category)
     formatedQueries.category = { $regex: queries.category, $options: "i" };
-
+  if (queries?.brand)
+    formatedQueries.brand = { $regex: queries.brand, $options: "i" };
   if (queries?.color) {
     delete formatedQueries.color;
     const colorArr = queries?.color?.split(",");
@@ -76,25 +77,21 @@ const getProducts = asyncHandler(async (req, res) => {
   let q = { ...formatedQueries, ...colorQueryObject };
   let queryCommand = Product.find(q);
 
-  // Sorting theo giá
   if (req.query.sort) {
     const sortBy = req.query.sort.split(",").join(" ");
     queryCommand = queryCommand.sort(sortBy);
   }
 
-  // Fields limit hạn chế trường lấy về
   if (req.query.fields) {
     const fields = req.query.fields.split(",").join(" ");
     queryCommand = queryCommand.select(fields);
   }
 
-  // Pagination
   const page = +req.query.page || 1;
   const limit = +req.query.limit || process.env.LIMIT_PRODUCTS;
   const skip = (page - 1) * limit;
   queryCommand.skip(skip).limit(limit);
 
-  // Execute query
   try {
     const response = await queryCommand.exec();
     const counts = await Product.find(q).countDocuments();
@@ -144,7 +141,6 @@ const ratings = asyncHandler(async (req, res) => {
   let updatedProduct;
 
   if (alreadyRating) {
-    // Update existing rating
     updatedProduct = await Product.findOneAndUpdate(
       {
         _id: pid,
@@ -155,7 +151,7 @@ const ratings = asyncHandler(async (req, res) => {
           "ratings.$.star": star,
           "ratings.$.comment": comment,
           "ratings.$.createdAt": new Date(),
-          "ratings.$.images": imageUrls, // Đảm bảo images được set đúng
+          "ratings.$.images": imageUrls,
         },
       },
       {
@@ -167,7 +163,6 @@ const ratings = asyncHandler(async (req, res) => {
       select: "firstname lastname avatar",
     });
   } else {
-    // Add new rating
     updatedProduct = await Product.findByIdAndUpdate(
       pid,
       {
@@ -177,7 +172,7 @@ const ratings = asyncHandler(async (req, res) => {
             comment,
             postedBy: _id,
             createdAt: new Date(),
-            images: imageUrls, // Đảm bảo images được set đúng
+            images: imageUrls,
           },
         },
       },
@@ -185,7 +180,6 @@ const ratings = asyncHandler(async (req, res) => {
     );
   }
 
-  // sum ratings tong ratings / nguoi danh gia = sum ratings
   const ratingCount = updatedProduct.ratings.length;
   const sumRatings = updatedProduct.ratings.reduce(
     (sum, el) => sum + +el.star,

@@ -41,14 +41,3 @@ const users = [
   },
 ];
 module.exports = { users };
-
-// export const roles = [
-//     {
-//         code: "10",
-//         value: "Admin"
-//     },
-//     {
-//     code: "20",
-//     value: "Member",
-//   },
-// ];
