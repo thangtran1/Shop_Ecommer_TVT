@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import Product from "components/Products/Product";
-import { Buttons } from "components";
 const Wishlish = () => {
   const { current } = useSelector((state) => state.user);
   console.log(current, "current");

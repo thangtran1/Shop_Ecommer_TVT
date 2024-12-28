@@ -17,7 +17,6 @@ const Personal = ({ navigate }) => {
     reset,
   } = useForm();
   const { current } = useSelector((state) => state.user);
-  const { updateUser } = useDispatch();
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const redirect = searchParams.get("redirect");

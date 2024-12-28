@@ -12,6 +12,7 @@ import {
   FinalRegister,
   ResetPassword,
   DetailCart,
+  DetailBlog,
 } from "./pages/public";
 import { Checkout } from "./pages/member";
 import path from "./ultils/path";
@@ -54,6 +55,7 @@ function App({ dispatch }) {
             path={path.DETAIL_PRODUCT_CATEGORY_PID_TITLE}
             element={<DetailProduct />}
           ></Route>
+          <Route path={path.DETAIL_BLOG} element={<DetailBlog />}></Route>
           <Route path={path.BLOGS} element={<Blogs />}></Route>
           <Route path={path.OUR_SERVICES} element={<Service />}></Route>
           <Route path={path.FAQ} element={<FAQ />}></Route>

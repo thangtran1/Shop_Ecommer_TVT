@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Input, Pagination, Modal, Button } from "antd";
 import { apiGetProducts } from "apis/product";
 import moment from "moment";
-import { redirect, useSearchParams } from "react-router-dom";
+import { redirect } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { InputForm, Loading } from "components";
 import { apiDeleteProduct, apiUpdateProduct } from "apis/product";
@@ -18,14 +18,12 @@ const ManageProduct = () => {
     handleSubmit,
     formState: { errors },
     reset,
-    setValue,
   } = useForm({
     defaultValues: {
       search: "",
     },
   });
 
-  const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [totalCounts, setTotalCounts] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -75,8 +73,8 @@ const ManageProduct = () => {
       quantity: product.quantity,
       sold: product.sold,
       color: product.color,
-      category: product.category, // Thêm trường category
-      ratings: product.ratings[0]?.star || "", // Thêm trường ratings
+      category: product.category,
+      ratings: product.ratings[0]?.star || "",
     });
     setIsModalVisible(true);
   };

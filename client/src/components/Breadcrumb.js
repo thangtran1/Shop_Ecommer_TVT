@@ -8,6 +8,8 @@ const Breadcrumb = ({ title, category }) => {
     { path: "/:category", breadcrumb: category },
     { path: "/", breadcrumb: "Home" },
     { path: "/:category/:pid/:title", breadcrumb: title },
+    { path: "/blogs", breadcrumb: "Blogs" },
+    { path: "/blogs/:id", breadcrumb: title },
   ];
   const breadcrumbs = useBreadcrumbs(routes);
   return (

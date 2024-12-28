@@ -50,3 +50,8 @@ export const apiGetUserOrders = (params) =>
     method: "get",
     params,
   });
+export const apiGetHotSaleProducts = () =>
+  axios({
+    url: "/product/hot-sale",
+    method: "get",
+  });

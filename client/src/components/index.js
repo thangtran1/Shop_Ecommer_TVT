@@ -39,3 +39,6 @@ export { default as Cart } from "./Publics/Cart";
 export { default as OrderItem } from "./Products/OrderItem";
 export { default as Paypal } from "./common/Paypal";
 export { default as PaymentSuccess } from "./common/PaymentSuccess";
+export { default as BannerHeader } from "./Publics/BannerHeader";
+export { default as HotSale } from "./HotSale";
+export { default as FooterEnd } from "./FooterEnd";

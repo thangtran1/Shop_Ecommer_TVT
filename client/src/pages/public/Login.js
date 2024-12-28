@@ -59,7 +59,7 @@ const Login = (props) => {
     } catch (error) {
       Swal.fire("Error", "Something went wrong!", "error");
     } finally {
-      // setIsLoading(false);
+      setIsLoading(false);
     }
   };
 

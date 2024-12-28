@@ -9,6 +9,14 @@ module.exports = {
       roman: "upper-roman",
     },
     extend: {
+      fontFamily: {
+        emoji: [
+          '"Segoe UI Emoji"',
+          '"Apple Color Emoji"',
+          '"Noto Color Emoji"',
+          "sans-serif",
+        ],
+      },
       width: {
         main: "1220px",
       },
@@ -82,6 +90,41 @@ module.exports = {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
         },
+        heart: {
+          "0%": {
+            transform: "scale(1)",
+          },
+          "25%": {
+            transform: "scale(1.05)",
+          },
+          "50%": {
+            transform: "scale(1)",
+          },
+          "75%": {
+            transform: "scale(1.05)",
+          },
+          "100%": {
+            transform: "scale(1)",
+          },
+        },
+        "heart-light": {
+          "0%": {
+            transform: "scale(1)",
+            opacity: "0.6",
+          },
+          "25%": {
+            transform: "scale(1.05)",
+            opacity: "0.4",
+          },
+          "50%": {
+            transform: "scale(1.1)",
+            opacity: "0.2",
+          },
+          "100%": {
+            transform: "scale(1.2)",
+            opacity: "0",
+          },
+        },
       },
 
       animation: {
@@ -93,6 +136,8 @@ module.exports = {
         fadeIn: "fadeIn 0.3s ease-in-out forwards",
         slideDown: "slideDown 0.3s ease-in-out forwards",
         "scale-up-center": "scale-up-center 0.15s ease-in-out forwards",
+        heart: "heart 1.5s infinite ease-in-out",
+        "heart-light": "heart-light 1.5s infinite ease-out",
       },
     },
   },

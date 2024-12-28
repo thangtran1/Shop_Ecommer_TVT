@@ -5,7 +5,7 @@ import {
   MdOutlineStar,
 } from "react-icons/md";
 import { IoBagHandleOutline, IoHomeOutline } from "react-icons/io5";
-import { FaUser } from "react-icons/fa6";
+import { FaUser, FaMotorcycle } from "react-icons/fa6";
 import {
   FaTachometerAlt,
   FaChevronDown,
@@ -16,13 +16,18 @@ import {
   FaTty,
   FaCartArrowDown,
 } from "react-icons/fa";
-
+import { TbMedal2 } from "react-icons/tb";
+import { SiSellfy } from "react-icons/si";
 import { BsCart4 } from "react-icons/bs";
 import { IoMdMenu, IoMdHeart, IoIosArrowForward } from "react-icons/io";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { LuLogOut } from "react-icons/lu";
-import { CiGift } from "react-icons/ci";
+import { CiGift, CiBoxList } from "react-icons/ci";
 const icons = {
+  IoIosArrowForward,
+  FaMotorcycle,
+  SiSellfy,
+  TbMedal2,
   FaCartArrowDown,
   BsCart4,
   FaTachometerAlt,
@@ -37,7 +42,6 @@ const icons = {
   FaEye,
   IoMdMenu,
   IoMdHeart,
-  IoIosArrowForward,
   AiOutlineEye,
   AiOutlineEyeInvisible,
   LuLogOut,
@@ -46,5 +50,6 @@ const icons = {
   CiGift,
   FaReplyAll,
   FaTty,
+  CiBoxList,
 };
 export default icons;

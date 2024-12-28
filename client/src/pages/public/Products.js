@@ -7,13 +7,7 @@ import {
 } from "react-router-dom";
 import { apiGetProducts } from "apis/product";
 import Masonry from "react-masonry-css";
-import {
-  InputSelectFilter,
-  Pagination,
-  SearchItem,
-  Product,
-  Breadcrumb,
-} from "components";
+import { InputSelectFilter, Pagination, SearchItem, Product } from "components";
 import { sortOptions } from "ultils/constants";
 const breakpointColumnsObj = {
   default: 4,
@@ -98,12 +92,6 @@ const Products = () => {
 
   return (
     <div className="w-full">
-      <div className="h-[81px] flex items-center justify-center bg-gray-100">
-        <div className="w-main">
-          <h3 className="font-semibold uppercase">{category}</h3>
-          <Breadcrumb category={category} />
-        </div>
-      </div>
       <div className="w-main border p-4 flex justify-between mt-8 mx-auto">
         <div className="w-4/5 flex-auto flex flex-col  gap-4 ">
           <span className="text-sm font-semibold">Filter by</span>

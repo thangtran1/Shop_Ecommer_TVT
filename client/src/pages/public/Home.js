@@ -3,10 +3,12 @@ import {
   Sidebar,
   CustomSlider,
   FearturedProduct,
+  HotSale,
   DealDaily,
   BestSeller,
   Banner,
 } from "components";
+import Blogs from "./Blogs";
 import { useSelector } from "react-redux";
 import icons from "ultils/icons";
 import withBase from "hocs/withBase";
@@ -15,22 +17,20 @@ const { IoIosArrowForward } = icons;
 const Home = ({ navigate }) => {
   const { newProducts } = useSelector((state) => state.product);
   const { categories } = useSelector((state) => state.app);
-  const { current } = useSelector((state) => state.user);
-  console.log(current, "current");
-  // const { isLoggedIn, current } = useSelector((state) => state.user);
-  console.log(categories, "categories");
-
   return (
     <>
       <div className="w-main flex mt-6">
-        <div className=" flex flex-col gap-5 w-[25%] flex-auto">
+        <div className=" flex flex-col gap-5 w-[20%] flex-auto">
           <Sidebar />
           <DealDaily />
         </div>
-        <div className=" flex flex-col gap-5 pl-5  w-[75%] flex-auto">
+        <div className=" flex flex-col gap-5 pl-5  w-[80%] flex-auto">
           <Banner />
           <BestSeller />
         </div>
+      </div>
+      <div className="my-8 w-main">
+        <HotSale />
       </div>
       <div className="my-8 w-main">
         <FearturedProduct />
@@ -89,6 +89,7 @@ const Home = ({ navigate }) => {
           <h3 className="text-[20px] font-semibold uppercase py-[15px] border-b-2 border-main">
             Blog posts
           </h3>
+          <Blogs />
         </div>
       </div>
     </>

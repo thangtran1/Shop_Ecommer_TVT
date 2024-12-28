@@ -1,14 +1,12 @@
 import React, { useState, useCallback, useEffect } from "react";
 import InputForm from "components/InputForm";
 import { useForm } from "react-hook-form";
-import { apiGetCategories } from "store/app/asyncActions";
 import { useSelector } from "react-redux";
-import { Select, Buttons, MarkdownEditer, Loading } from "components";
+import { Select, MarkdownEditer, Loading } from "components";
 import { validate } from "ultils/helper";
 import { Button } from "antd";
 import { fileToBase64 } from "ultils/helper";
 import { toast } from "react-toastify";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { useDispatch } from "react-redux";
 import { apiCreateProduct } from "apis/product";
 import { showModal } from "store/app/appReducer";
@@ -27,8 +25,7 @@ const CreateProduct = () => {
   const [payload, setPayload] = useState({
     description: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
-  const [hover, setHover] = useState(null);
+  // const [hover, setHover] = useState(null);
   const [preview, setPreview] = useState({
     thumb: null,
     images: [],
@@ -275,8 +272,8 @@ const CreateProduct = () => {
               <div div className="my-4 flex w-full gap-4 flex-wrap">
                 {preview?.images?.map((item, index) => (
                   <div
-                    onMouseEnter={() => setHover(index)}
-                    onMouseLeave={() => setHover(null)}
+                    // onMouseEnter={() => setHover(index)}
+                    // onMouseLeave={() => setHover(null)}
                     className="w-fit relative bg-gray-200"
                     key={index}
                   >

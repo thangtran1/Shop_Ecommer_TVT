@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { getCurrent } from "store/user.js/asyncAction";
 import { logout, clearMessage } from "store/user.js/userSlice";
 import Swal from "sweetalert2";
+import icon_comment from "assets/icon_comment.png";
 import withBase from "hocs/withBase";
 const TopHeader = ({ dispatch, navigate, current }) => {
   const { LuLogOut } = icons;
@@ -35,9 +36,19 @@ const TopHeader = ({ dispatch, navigate, current }) => {
     }
   }, [message]);
   return (
-    <div className="h-[38px] w-full bg-main border flex items-center justify-center">
-      <div className="w-main flex items-center justify-between text-xs text-white">
-        <span className="">ORDER ONLINE OR CALL US (+1800) 000 8808</span>
+    <div className="h-[40px] w-full bg-[#d70018] border flex items-center justify-center">
+      <div className="w-main flex items-center justify-between text-xs p-3 text-white">
+        <div className="flex items-center gap-2">
+          <div
+            onClick={() => navigate(`/${path.HOME}`)}
+            className="flex items-center cursor-pointer"
+          >
+            <img src={icon_comment} alt="logo" className="w-12 h-12" />
+            <small className="font-[600] font-initial text-[15px]">
+              XS-SHOP
+            </small>
+          </div>
+        </div>
         {current ? (
           <div className="flex items-center gap-4 text-sm">
             <small>{`Welcome ${current?.lastname} ${current?.firstname}`}</small>

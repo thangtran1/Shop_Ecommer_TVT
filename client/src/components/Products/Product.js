@@ -24,7 +24,9 @@ const Product = ({
   dispatch,
   className,
   current,
+  discountPercentage,
 }) => {
+  console.log(discountPercentage);
   const [isShowOption, setIsShowOption] = useState(false);
   const handlerClickOption = async (e, type) => {
     e.stopPropagation();
@@ -83,12 +85,14 @@ const Product = ({
     }
   };
   return (
-    <div className={clsx("w-full text-base  px-[10px]", className)}>
+    <div
+      className={clsx("w-full text-base py-2 p-[10px] px-[10px]", className)}
+    >
       <Link
         to={`/${productData?.category?.toLowerCase()}/${productData?._id}/${
           productData?.title
         }`}
-        className="w-full border p-[15px] flex flex-col items-center"
+        className="w-full border rounded-lg p-4  flex flex-col items-center bg-white"
         onMouseEnter={(e) => {
           e.stopPropagation();
           setIsShowOption(true);
@@ -181,7 +185,33 @@ const Product = ({
             {renderStarFromNumber(productData?.totalRatings)}
           </span>
           <span className="line-clamp-1">{productData?.title}</span>
-          <span>{`${formatMoney(productData?.price)} VND`}</span>
+          <span>
+            {!discountPercentage && `${formatMoney(productData?.price)} VND`}
+          </span>
+          {discountPercentage > 0 && (
+            <>
+              <div className="flex items-center gap-2">
+                <span className="text-[#d70018] font-[700] line-height-[1] ">
+                  {`${formatMoney(
+                    productData?.price -
+                      (productData?.price * discountPercentage) / 100
+                  )}`}
+                </span>
+                <span
+                  className={
+                    discountPercentage > 0
+                      ? "text-[#707070] text-decoration-line: line-through font-semibold"
+                      : "text-black  "
+                  }
+                >
+                  {`${formatMoney(productData?.price)}`}
+                </span>
+              </div>
+              <span className="product-main-sale">
+                {`Giảm ${discountPercentage.toFixed(0)}%`}
+              </span>
+            </>
+          )}
         </div>
       </Link>
     </div>

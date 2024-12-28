@@ -1,5 +1,28 @@
 import path from "./path";
 import icons from "./icons";
+import Banner1 from "assets/BannerHeader/Banner1.png";
+import Banner2 from "assets/BannerHeader/Banner2.png";
+import Banner3 from "assets/BannerHeader/Banner3.png";
+import Banner4 from "assets/BannerHeader/Banner4.png";
+import Home1 from "assets/BannerHome/home1.png";
+import Home2 from "assets/BannerHome/home2.png";
+import Home3 from "assets/BannerHome/home3.png";
+import Home4 from "assets/BannerHome/home4.png";
+import Home5 from "assets/BannerHome/home5.png";
+import iconpayment1 from "assets/IconFooter/iconpayment1.png";
+import iconpayment2 from "assets/IconFooter/iconpayment2.png";
+import iconpayment3 from "assets/IconFooter/iconpayment3.png";
+import iconpayment4 from "assets/IconFooter/iconpayment4.png";
+import iconpayment5 from "assets/IconFooter/iconpayment5.png";
+import iconpayment6 from "assets/IconFooter/iconpayment6.png";
+import iconpayment7 from "assets/IconFooter/iconpayment7.png";
+import iconpayment8 from "assets/IconFooter/iconpayment8.png";
+import iconpayment9 from "assets/IconFooter/iconpayment9.png";
+import Facebook from "assets/IconFooter/Facebook.png";
+import Instagram from "assets/IconFooter/Ins.png";
+import Youtube from "assets/IconFooter/Youtube.png";
+import Tiktok from "assets/IconFooter/Tiktok.png";
+import Zalo from "assets/IconFooter/Zalo.png";
 const { FaShieldAlt, FaTruck, CiGift, FaReplyAll, FaTty } = icons;
 export const navigation = [
   {
@@ -346,3 +369,87 @@ export const blockStatus = [
     value: "Active",
   },
 ];
+export const SLIDER_ITEMS = [
+  {
+    image: Banner1,
+  },
+  {
+    image: Banner2,
+  },
+  {
+    image: Banner3,
+  },
+  {
+    image: Banner4,
+  },
+];
+
+export const SLIDER_ITEMS_HOME = [
+  {
+    image: Home1,
+    text: "MỪNG KHAI TRƯƠNG - Ưu đãi cực khủng",
+  },
+  {
+    image: Home2,
+    text: "IPHONE 16 SERIES - Mua ngay!",
+  },
+  {
+    image: Home3,
+    text: "GALAXY S24 ULTRA - Giá tốt chốt ngay!",
+  },
+  {
+    image: Home4,
+    text: "OPPO A27 - Ưu đãi cực khủng",
+  },
+  {
+    image: Home5,
+    text: "MAXBOOK PRO - Mua ngay!",
+  },
+];
+
+export const policies = [
+  "Mua hàng và thanh toán Online",
+  "Mua hàng trả góp Online",
+  "Mua hàng trả góp bằng thẻ tín dụng",
+  "Chính sách giao hàng",
+  "Tra điểm Smember",
+  "Xem ưu đãi Smember",
+  "Tra thông tin bảo hành",
+  "Tra cứu hoá đơn điện tử",
+  "Thông tin hoá đơn mua hàng",
+  "Trung tâm bảo hành chính hãng",
+  "Quy định về việc sao lưu dữ liệu",
+  "Chính sách khui hộp sản phẩm Apple",
+];
+
+export const supportLines = [
+  { label: "Gọi mua hàng", phone: "1800.2097", time: "7h30 - 22h00" },
+  { label: "Gọi khiếu nại", phone: "1800.2063", time: "8h00 - 21h30" },
+  { label: "Gọi bảo hành", phone: "1800.2064", time: "8h00 - 21h00" },
+];
+export const paymentIcons = [
+  iconpayment1,
+  iconpayment2,
+  iconpayment3,
+  iconpayment4,
+  iconpayment5,
+  iconpayment6,
+  iconpayment7,
+  iconpayment8,
+  iconpayment9,
+];
+
+export const other = [
+  "Khách hàng doanh nghiệp (B2B)",
+  "Ưu đãi thanh toán",
+  "Quy chế hoạt động",
+  "Chính sách giao hàng",
+  "Chính sách bảo mật thông tin cá nhân",
+  "Chính sách Bảo hành",
+  "Liên hệ hợp tác kinh doanh",
+  "Tuyển dụng",
+  "Dịch vụ bảo hành mở rộng",
+  "Smember: Tích điểm & sử dụng ưu đãi",
+];
+
+export const connectTVT = [Facebook, Instagram, Youtube, Tiktok, Zalo];

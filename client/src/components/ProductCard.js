@@ -8,6 +8,7 @@ const ProductCard = ({
   thumb,
   category,
   productData,
+  discountPercentage,
   navigate,
 }) => {
   return (
@@ -32,6 +33,9 @@ const ProductCard = ({
             {renderStarFromNumber(totalRatings, 14)}
           </span>
           <span>{`${formatMoney(price)} VND`}</span>
+          {discountPercentage > 0 && (
+            <span className="text-green-500">{`Giảm ${discountPercentage}%`}</span>
+          )}
         </div>
       </div>
     </div>

@@ -165,3 +165,242 @@ code {
   width: 100%;
   max-width: 1000px;
 }
+
+.header-banner button.slick-next {
+  right: 73px;
+  top: 17px;
+  z-index: 10;
+  background-color: transparent;
+  border: none;
+}
+.header-banner button.slick-prev {
+  left: -22px;
+  top: 17px;
+  z-index: 10;
+  background-color: transparent;
+  border: none;
+}
+.header-banner button.slick-next::before {
+  color: #00138f;
+  content: "\276F";
+  font-size: 26px;
+  display: block;
+  width: auto;
+  height: auto;
+  line-height: 1;
+}
+.header-banner button.slick-prev::before {
+  color: #00138f;
+  content: "\276F";
+  font-size: 26px;
+  display: block;
+  width: auto;
+  height: auto;
+  line-height: 1;
+}
+
+.svg.cursor-pointer {
+  color: #030c65 !important;
+  font-size: 24px !important;
+  font-weight: 600 !important;
+}
+svg.cursor-pointer {
+  color: #030c65 !important;
+  font-size: 24px !important;
+  font-weight: 600 !important;
+}
+
+.banner-header {
+  width: 100%;
+  margin: auto;
+  position: relative;
+}
+.banner-header img {
+  max-width: 100%;
+  height: auto;
+}
+.banner-header button {
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  padding: 10px;
+}
+
+.main-bg {
+  background-color: #f9405f;
+}
+.product-main-sale {
+  position: absolute;
+  background-color: #f9405f;
+  border-radius: 8px;
+  color: white;
+  top: 8px;
+  left: 10px;
+  padding: 4px 8px;
+}
+
+.featured-product button.slick-next {
+  right: 80px;
+  z-index: 10;
+}
+.featured-product button.slick-prev {
+  left: 20px;
+  z-index: 10;
+}
+.featured-product button.slick-next::before {
+  color: gray;
+  content: "\276F";
+  background-color: #f7dbdb;
+  width: 80px;
+  height: 80px;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.featured-product button.slick-prev::before {
+  color: gray;
+  content: "\276F";
+  background-color: #f7dbdb;
+  width: 80px;
+  height: 80px;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.featured-product button.slick-next {
+  right: 0px;
+  top: 55px;
+  z-index: 10;
+}
+.featured-product button.slick-prev {
+  left: 0px;
+  top: 55px;
+  z-index: 10;
+}
+.featured-product button.slick-next::before {
+  color: gray;
+  content: "\276F";
+  background-color: red;
+  width: 40px;
+  height: 40px;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.featured-product button.slick-prev::before {
+  color: gray;
+  content: "\276F";
+  background-color: red;
+  width: 40px;
+  height: 40px;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.blogs-container {
+  background-color: #f9fafb;
+}
+
+.blog-card img {
+  transition: transform 0.3s ease-in-out;
+}
+
+.blog-card:hover img {
+  transform: scale(1.05);
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+.line-clamp-7 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 7;
+  white-space: normal;
+}
+
+.blog-slider {
+  position: relative;
+}
+
+.blog-slider button.slick-next,
+.blog-slider button.slick-prev {
+  position: absolute;
+  z-index: 10;
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.blog-slider button.slick-next {
+  right: -10px;
+}
+
+.blog-slider button.slick-prev {
+  left: -10px;
+}
+
+.blog-slider button.slick-next::before,
+.blog-slider button.slick-prev::before {
+  content: "\276F";
+  color: #888;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1;
+  display: block;
+  transition: color 0.3s ease;
+}
+
+.blog-slider button.slick-prev::before {
+  transform: rotate(180deg);
+}
+
+.blog-slider button.slick-next:hover,
+.blog-slider button.slick-prev:hover {
+  background-color: #f5f5f5;
+}
+
+.blog-slider button.slick-next:hover::before,
+.blog-slider button.slick-prev:hover::before {
+  color: red;
+}
+
+@media (max-width: 768px) {
+  .blog-slider button.slick-next,
+  .blog-slider button.slick-prev {
+    width: 40px;
+    height: 40px;
+  }
+
+  .blog-slider button.slick-next::before,
+  .blog-slider button.slick-prev::before {
+    font-size: 16px;
+  }
+
+  .blog-slider button.slick-next {
+    right: -15px;
+  }
+
+  .blog-slider button.slick-prev {
+    left: -15px;
+  }
+}

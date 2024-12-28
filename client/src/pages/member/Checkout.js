@@ -3,10 +3,8 @@ import img from "assets/payment-image.jpg";
 import { useSelector, useDispatch } from "react-redux";
 import { formatMoney } from "ultils/helper";
 import { Paypal, PaymentSuccess } from "components";
-import { useForm } from "react-hook-form";
 import { getCurrent } from "store/user.js/asyncAction";
 import withBase from "hocs/withBase";
-import { useNavigate } from "react-router-dom";
 const Checkout = () => {
   const { currentCart, current } = useSelector((state) => state.user);
   const dispatch = useDispatch();

@@ -1,76 +1,163 @@
 import React, { memo } from "react";
-import icons from "ultils/icons";
-const { MdOutlineMail } = icons;
+import Buttons from "components/Buttons";
+import {
+  policies,
+  supportLines,
+  paymentIcons,
+  other,
+  connectTVT,
+} from "ultils/constants";
+import schannel from "assets/IconFooter/schannel.png";
+import dt from "assets/IconFooter/dt.png";
+import care from "assets/IconFooter/care.png";
+import { Link } from "react-router-dom";
+import { FaStar } from "react-icons/fa";
+import QR_TVT from "assets/IconFooter/QR_TVT.png";
+import AppStore from "assets/IconFooter/AppStore.png";
+import ChPlay from "assets/IconFooter/ChPlay.png";
 const Footer = () => {
   return (
     <div className="w-full">
-      <div className="h-[103px] w-full bg-main  flex items-center justify-center">
-        <div className="w-main flex items-center justify-between">
-          <div className="flex flex-col flex-1">
-            <span className="text-[20px] text-gray-100">
-              Sign up to Newsletter
-            </span>
-            <small className="text-[13px] text-gray-300">
-              Subscribe now and receive weekly newsletter
-            </small>
-          </div>
-          <div className="flex-1 flex items-center">
-            <input
-              className=" w-full  p-4 pr-0 outline-none rounded-l-full  bg-[#F04646] text-gray-100 placeholder:text-sm placeholder:opacity-50  placeholder:text-gray-200 placeholder:italic  "
-              type="text"
-              placeholder="Your email address"
-            />
-            <div className="h-[56px] w-[56px] text-white flex items-center justify-center bg-[#F04646] rounded-r-full">
-              <MdOutlineMail size={16} />
+      <div className="h-full flex items-center justify-center w-full bg-white shadow-lg border-t border-[#E0E0E0]   ">
+        <div className="w-main flex   text-[#363636] text-[13px] mb-4 my-[25px]">
+          {/* Tổng đài hỗ trợ miễn phí */}
+          <div className="flex-1 flex flex-col gap-2 px-[15px] ">
+            <div className="text-[16px] font-medium font-emoji text-[#363636]">
+              Tổng đài hỗ trợ miễn phí
+            </div>
+            <div className="flex flex-col gap-2 px-[12px] font-emoji">
+              {supportLines.map((line, index) => (
+                <small key={index}>
+                  {line.label} <b>{line.phone}</b> ({line.time})
+                </small>
+              ))}
+            </div>
+
+            {/* Phương thức thanh toán */}
+            <div className="text-[16px] font-medium font-emoji text-[#363636]">
+              Phương thức thanh toán
+            </div>
+            <div className="flex flex-col gap-2 px-[12px] font-emoji">
+              <ul className="flex flex-wrap gap-[5px]">
+                {paymentIcons.map((icon, index) => (
+                  <li key={index} className="border rounded-[5px]">
+                    <a href="tel:1800.2097">
+                      <img src={icon} alt={`iconpayment${index + 1}`} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Đăng ký nhận tin khuyến mãi */}
+            <div className=" text-[16px] font-medium font-emoji  text-[#363636]">
+              ĐĂNG KÝ NHẬN TIN KHUYẾN MÃI
+            </div>
+            <div className="flex flex-col gap-2 px-[12px] font-emoji">
+              <small className="text-main font-emoji">
+                (*) Nhận ngay voucher 10%
+              </small>
+              <small className="font-emoji">
+                *Voucher sẽ được gửi sau 24h, chỉ áp dụng cho khách hàng mới
+              </small>
+              <Link to="/login">
+                <Buttons fw>ĐĂNG KÝ NGAY</Buttons>
+              </Link>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="h-[407px] flex items-center justify-center w-full bg-gray-800  ">
-        <div className="w-main flex  text-white text-[13px]">
-          <div className="flex-2 flex flex-col gap-2">
-            <h3 className="mb-[20px]  text-[15px] font-medium border-l-2 border-main pl-[15px]">
-              About Us
-            </h3>
-            <span>
-              <span>Address: </span>
-              <span className="opacity-50">
-                474 Ontario St Toronto, ON M4X 1M7 Canada
-              </span>
-            </span>
-            <span>
-              <span>Phone: </span>
-              <span className="opacity-50">(+1234)56789xxx</span>
-            </span>
-            <span>
-              <span>Mail: </span>
-              <span className="opacity-50">tadathemes@gmail.com</span>
-            </span>
+
+          {/* Thông tin và chính sách */}
+          <div className="flex-1 flex flex-col gap-2 px-[15px]">
+            <div className="text-[16px] font-medium font-emoji text-[#363636]">
+              Thông tin và chính sách
+            </div>
+            <div className="flex flex-col gap-2 px-[12px] font-emoji">
+              <ul className="flex flex-col">
+                {policies.map((policy, index) => (
+                  <li
+                    key={index}
+                    className="flex flex-wrap gap-[5px] font-emoji text-[13px]"
+                  >
+                    <a className="mb-1 hover:text-main" href="tel:1800.2097">
+                      <span>{policy}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <div className="flex-1 flex flex-col gap-2">
-            <h3 className="mb-[20px]  text-[15px] font-medium border-l-2 border-main pl-[15px]">
-              Information
-            </h3>
-            <span>Typography</span>
-            <span>Gallery</span>
-            <span>Store Location</span>
-            <span>Today's Deals</span>
-            <span>Contact</span>
+
+          {/* Dịch vụ và thông tin khác */}
+          <div className="flex-1 flex flex-col gap-2 px-[15px]">
+            <div className="text-[16px] font-medium font-emoji text-[#363636]">
+              Dịch vụ và thông tin khác
+            </div>
+            <div className="flex flex-col gap-2 px-[12px] font-emoji">
+              <ul className="flex flex-col">
+                {other.map((policy, index) => (
+                  <li
+                    key={index}
+                    className="flex flex-wrap gap-[5px] font-emoji text-[13px]"
+                  >
+                    <a
+                      className="mb-1 hover:text-main flex items-center"
+                      href="tel:1800.2097"
+                    >
+                      <span>{policy}</span>
+                      {policy === "Smember: Tích điểm & sử dụng ưu đãi" && (
+                        <FaStar className="ml-2 text-yellow-500" /> // Thêm icon ở đây
+                      )}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="flex gap-2 ">
+              <div className="flex-1">
+                <img src={QR_TVT} alt="QR_TVT" />
+              </div>
+              <div className="flex-1 flex flex-col gap-2">
+                <div>
+                  <img src={AppStore} alt="AppStore" />
+                </div>
+                <div>
+                  <img src={ChPlay} alt="ChPlay" />
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex-1 flex flex-col gap-2">
-            <h3 className="mb-[20px]  text-[15px] font-medium border-l-2 border-main pl-[15px]">
-              WHO WE ARE
-            </h3>
-            <span>Help</span>
-            <span>Free Shipping</span>
-            <span>FAQs</span>
-            <span>Return & Exchange</span>
-            <span>Testimonials</span>
-          </div>
-          <div className="flex-1 flex flex-col gap-2">
-            <h3 className="mb-[20px]  text-[15px] font-medium border-l-2 border-main pl-[15px]">
-              #DigitalWorldStore
-            </h3>
+
+          {/* Kết nối với CellphoneS */}
+          <div className="flex-1 flex flex-col gap-2 px-[15px]">
+            <div className=" text-[16px] font-medium font-emoji  text-[#363636]">
+              Kết nối với TVT
+            </div>
+            <div className="flex flex-col gap-2 px-[12px] font-emoji">
+              <ul className="flex flex-wrap gap-[5px]">
+                {connectTVT.map((icon, index) => (
+                  <li key={index} className="border rounded-[5px]">
+                    <a href="tel:1800.2097">
+                      <img src={icon} alt={`iconpayment${index + 1}`} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className=" text-[16px] font-medium font-emoji  text-[#363636]">
+              Website một thành viên
+            </div>
+            <div className="mt-1 text-[16px] font-medium font-emoji  text-[#363636]">
+              Hệ thống bảo hành sửa chữa Điện thoại - Máy tính
+              <img src={dt} alt="dt" className="mt-1" />
+            </div>
+            <div className="mt-1 text-[16px] font-medium font-emoji  text-[#363636]">
+              Kênh thông tin giải trí công nghệ cho giới trẻ
+              <img src={schannel} alt="dt" className="mt-1" />
+            </div>
+            <div className="mt-1 text-[16px] font-medium font-emoji  text-[#363636]">
+              Trang thông tin công nghệ mới nhất
+              <img src={care} alt="dt" className="mt-1" />
+            </div>
           </div>
         </div>
       </div>

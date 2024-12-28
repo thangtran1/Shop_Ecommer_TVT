@@ -13,7 +13,7 @@ const path = {
   DETAIL_CART: "detail-cart",
   CHECKOUT: "checkout",
   PRODUCTS: "products",
-
+  DETAIL_BLOG: "blogs/:bid",
   // Admin
   ADMIN: "admin",
   DASHBOARD: "dashboard",

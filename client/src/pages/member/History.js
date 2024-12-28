@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Input, Pagination } from "antd";
 import { apiGetUserOrders } from "apis/product";
 const History = () => {
-  const [orders, setOrders] = useState([]);
+  // const [orders, setOrders] = useState([]);
   const [totalCounts, setTotalCounts] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -12,10 +12,10 @@ const History = () => {
       limit: 5,
     });
     if (response.success) {
-      setOrders(response.orders);
+      // setOrders(response.orders);
       setTotalCounts(response.counts);
     } else {
-      setOrders([]);
+      // setOrders([]);
       setTotalCounts(0);
     }
   };

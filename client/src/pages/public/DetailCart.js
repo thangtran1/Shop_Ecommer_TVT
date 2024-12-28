@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import Breadcrumb from "components/Breadcrumb";
 import withBase from "hocs/withBase";
 import { formatMoney } from "ultils/helper";
 import OrderItem from "components/Products/OrderItem";
@@ -14,7 +13,7 @@ const DetailCart = ({ location }) => {
     (state) => state.user
   );
 
-  const [cartItems, setCartItems] = useState(currentCart || []);
+  const [cartItems] = useState(currentCart || []);
   const handleCheckout = () => {
     if (!current?.address) {
       Swal.fire({

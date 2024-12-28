@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import { useParams, useNavigate, createSearchParams } from "react-router-dom";
+import { useParams, createSearchParams } from "react-router-dom";
 import { apiGetProductDetail, apiGetProducts } from "apis/product";
 import {
   Breadcrumb,

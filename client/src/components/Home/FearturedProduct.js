@@ -4,7 +4,8 @@ import section2 from "assets/section2.png";
 import section3 from "assets/section3.png";
 import section4 from "assets/section4.png";
 import { apiGetProducts } from "apis";
-import ProductCard from "../ProductCard";
+import CustomSlider from "../CustomSlider";
+
 const FearturedProduct = () => {
   const [products, setProducts] = useState(null);
   const fetchProducts = async () => {
@@ -13,6 +14,7 @@ const FearturedProduct = () => {
       sort: "-totalRatings",
     });
     if (response?.success) setProducts(response.products);
+    console.log("response.productsresponse.products", response.products);
   };
   useEffect(() => {
     fetchProducts();
@@ -22,18 +24,8 @@ const FearturedProduct = () => {
       <h3 className="text-[20px] font-semibold py-[15px] border-b-2 border-main">
         FEATURED PRODUCTS
       </h3>
-      <div className="flex flex-wrap mt-[15px] mx-[-10px] ">
-        {products?.map((el) => (
-          <ProductCard
-            key={el._id}
-            pid={el._id}
-            category={el.category}
-            title={el.title}
-            thumb={el.thumb}
-            price={el.price}
-            productData={el}
-          />
-        ))}
+      <div className="m-[-10px] mt-4">
+        <CustomSlider products={products} normal={true} />
       </div>
       <div className="grid grid-cols-4 grid-rows-2 gap-4 mt-[20px]">
         <img
