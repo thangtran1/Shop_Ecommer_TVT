@@ -211,6 +211,31 @@ const uploadImagesProduct = asyncHandler(async (req, res) => {
   });
 });
 
+const getHotSaleProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find();
+  const hotSaleProducts = [];
+  for (const product of products) {
+    if (!product.originalPrice || !product.price) {
+      console.log(`Missing price data for product: ${product.title}`);
+      continue;
+    }
+    const discount =
+      ((product.originalPrice - product.price) / product.originalPrice) * 100;
+    console.log(`Product: ${product.title}, Discount: ${discount}%`);
+    product.discountPercentage = discount;
+    await product.save();
+    if (discount >= 20) {
+      hotSaleProducts.push(product);
+    }
+  }
+  return res.status(200).json({
+    success: hotSaleProducts.length > 0,
+    hotSaleProducts:
+      hotSaleProducts.length > 0
+        ? hotSaleProducts
+        : "Cannot get hot sale products",
+  });
+});
 module.exports = {
   createProduct,
   getProduct,
@@ -219,4 +244,5 @@ module.exports = {
   deleteProduct,
   ratings,
   uploadImagesProduct,
+  getHotSaleProducts,
 };

@@ -60,6 +60,14 @@ var productSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    originalPrice: {
+      type: Number,
+      required: true,
+    },
+    discountPercentage: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

@@ -2,9 +2,13 @@ const Blog = require("../models/blog");
 const asyncHandler = require("express-async-handler");
 
 const createNewBlog = asyncHandler(async (req, res) => {
-  const { title, description, category } = req.body;
+  const { title, description, category, image } = req.body;
   if (!title || !description || !category) throw new Error("Missing inputs");
   const response = await Blog.create(req.body);
+  if (!image) {
+    req.body.image =
+      "https://i0.wp.com/www.pacharne.com/wp-content/uploads/2021/05/2433830-3.jpg?fit=1985%2C1309&ssl=1"; // Giá trị mặc định
+  }
   return res.status(200).json({
     success: response ? true : false,
     createdBlog: response ? response : "Cannot create new Blog",
@@ -147,6 +151,16 @@ const uploadImagesBlog = asyncHandler(async (req, res) => {
     updatedBlog: response ? response : "Cannot upload image blog",
   });
 });
+
+const getBlogDetail = asyncHandler(async (req, res) => {
+  const { bid } = req.params;
+  const blog = await Blog.findById(bid);
+  return res.status(200).json({
+    success: blog ? true : false,
+    result: blog,
+  });
+});
+
 module.exports = {
   createNewBlog,
   updateBlog,
@@ -156,4 +170,5 @@ module.exports = {
   dislikeBlog,
   getBlog,
   uploadImagesBlog,
+  getBlogDetail,
 };

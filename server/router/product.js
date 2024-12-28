@@ -14,6 +14,7 @@ router.post(
   ctrl.createProduct
 );
 router.get("/", ctrl.getProducts);
+router.get("/hot-sale", ctrl.getHotSaleProducts);
 
 // Route ratings với middleware xử lý upload 3 ảnh
 router.put(
