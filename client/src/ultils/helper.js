@@ -1,5 +1,5 @@
 import icons from "./icons";
-
+import moment from "moment";
 const { MdOutlineStarBorder, MdOutlineStar } = icons;
 export const createSlug = (string) =>
   string
@@ -65,4 +65,14 @@ export const fileToBase64 = (file) => {
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
+};
+
+export const formatMessageDate = (createdAt) => {
+  if (!createdAt) return "N/A";
+
+  const date = moment(createdAt);
+
+  if (!date.isValid()) return "Invalid Date";
+
+  return date.format("hh:mm A");
 };

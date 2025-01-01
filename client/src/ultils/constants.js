@@ -451,5 +451,4 @@ export const other = [
   "Dịch vụ bảo hành mở rộng",
   "Smember: Tích điểm & sử dụng ưu đãi",
 ];
-
 export const connectTVT = [Facebook, Instagram, Youtube, Tiktok, Zalo];

@@ -14,7 +14,6 @@ const FearturedProduct = () => {
       sort: "-totalRatings",
     });
     if (response?.success) setProducts(response.products);
-    console.log("response.productsresponse.products", response.products);
   };
   useEffect(() => {
     fetchProducts();

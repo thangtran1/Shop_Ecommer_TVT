@@ -42,3 +42,4 @@ export { default as PaymentSuccess } from "./common/PaymentSuccess";
 export { default as BannerHeader } from "./Publics/BannerHeader";
 export { default as HotSale } from "./HotSale";
 export { default as FooterEnd } from "./FooterEnd";
+export { default as Conversation } from "./Conversation";

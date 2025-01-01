@@ -26,7 +26,6 @@ const Product = ({
   current,
   discountPercentage,
 }) => {
-  console.log(discountPercentage);
   const [isShowOption, setIsShowOption] = useState(false);
   const handlerClickOption = async (e, type) => {
     e.stopPropagation();

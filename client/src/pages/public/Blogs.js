@@ -12,12 +12,10 @@ const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [recentArticles, setRecentArticles] = useState([]);
   const location = useLocation();
-  console.log("location", location);
 
   useEffect(() => {
     const fetchBlogs = async () => {
       const response = await apiGetBlogs();
-      console.log("responseresponse", response);
       if (response?.success) {
         setBlogs(response.Blogs);
         setRecentArticles(response.Blogs.slice(0, 5));
