@@ -216,12 +216,10 @@ const getHotSaleProducts = asyncHandler(async (req, res) => {
   const hotSaleProducts = [];
   for (const product of products) {
     if (!product.originalPrice || !product.price) {
-      console.log(`Missing price data for product: ${product.title}`);
       continue;
     }
     const discount =
       ((product.originalPrice - product.price) / product.originalPrice) * 100;
-    console.log(`Product: ${product.title}, Discount: ${discount}%`);
     product.discountPercentage = discount;
     await product.save();
     if (discount >= 20) {
